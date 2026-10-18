@@ -7,20 +7,10 @@ O site roda como um único Cloudflare Worker:
 - `migrations/0001_init.sql` — estrutura do banco. O Worker também cria as tabelas sozinho
   na primeira requisição, então não é preciso rodar migração manualmente.
 
-## 0. Criar o banco e o armazenamento de fotos (só na primeira vez)
+## 0. Banco e fotos (já criados)
 
-O `wrangler.jsonc` ainda tem um **marcador** no lugar do id do banco. Antes do primeiro deploy:
-
-```bash
-npx wrangler login
-npx wrangler d1 create trindade-solidaria-db          # copie o "database_id" mostrado
-npx wrangler r2 bucket create trindade-solidaria-fotos
-# opcional, para as prévias de cada branch/PR:
-npx wrangler d1 create trindade-solidaria-db-preview
-npx wrangler r2 bucket create trindade-solidaria-fotos-preview
-```
-
-Cole o `database_id` de cada banco no `wrangler.jsonc` (troque os `00000000-...`) e faça commit.
+Na conta da Cloudflare já existem o banco `trindade-solidaria-db` (e `trindade-solidaria-db-preview`, para as prévias)
+e os buckets R2 `trindade-solidaria-fotos` e `trindade-solidaria-fotos-preview`. Os ids estão no `wrangler.jsonc`.
 
 ## 1. Conectar o GitHub (deploy automático a cada push na `main`)
 
@@ -40,8 +30,7 @@ Cole o `database_id` de cada banco no `wrangler.jsonc` (troque os `00000000-...`
 | `RESEND_API_KEY` | opcional: chave do Resend. O sistema só manda e-mail no "Esqueci minha senha"; sem a chave, o administrador redefine a senha pela aba Usuários |
 
 As variáveis não secretas (`ADMIN_EMAIL`, `EMAIL_FROM`, `SEED_DEMO_DATA`)
-ficam em `wrangler.jsonc`. **Troque o `ADMIN_EMAIL`** (hoje `coordenacao@institutotrindadesolidaria.org.br`,
-um endereço provisório) pelo e-mail real de quem vai administrar, e faça push.
+ficam em `wrangler.jsonc`. O `ADMIN_EMAIL` é o login do primeiro administrador.
 
 > A conta administrativa é criada automaticamente na primeira visita, **somente** se o banco
 > não tiver nenhum usuário e `ADMIN_INITIAL_PASSWORD` estiver definido. Depois do primeiro

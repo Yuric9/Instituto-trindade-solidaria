@@ -13,14 +13,12 @@
     "run_worker_first": ["/api/*"]
   },
 
-  // Banco D1. ANTES DO PRIMEIRO DEPLOY: crie o banco com
-  //   npx wrangler d1 create trindade-solidaria-db
-  // e cole aqui o "database_id" que o comando mostrar (o valor abaixo é só um marcador).
+  // Banco D1 (já criado na conta da Cloudflare).
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "trindade-solidaria-db",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "b2839e5c-99b6-493a-8f60-f1887c0a9c4f",
       "migrations_dir": "migrations"
     }
   ],
@@ -45,7 +43,7 @@
   // Variáveis públicas. Segredos (JWT_SECRET, ADMIN_INITIAL_PASSWORD, RESEND_API_KEY)
   // ficam em Settings → Variables and Secrets no painel, NUNCA aqui.
   "vars": {
-    "ADMIN_EMAIL": "coordenacao@institutotrindadesolidaria.org.br",
+    "ADMIN_EMAIL": "yure-c@hotmail.com",
     "EMAIL_FROM": "",
     "SEED_DEMO_DATA": "false",
     "DEV_MODE": "false"
@@ -56,7 +54,7 @@
   // EMAIL_FROM vazio = prévias não enviam e-mails de verdade.
   "previews": {
     "vars": {
-      "ADMIN_EMAIL": "coordenacao@institutotrindadesolidaria.org.br",
+      "ADMIN_EMAIL": "yure-c@hotmail.com",
       "EMAIL_FROM": "",
       "SEED_DEMO_DATA": "true",
       "DEV_MODE": "false"
@@ -64,7 +62,8 @@
     "d1_databases": [
       {
         "binding": "DB",
-        "database_id": "00000000-0000-0000-0000-000000000001"
+        // Banco das prévias (trindade-solidaria-db-preview)
+        "database_id": "19be41ce-bb5f-4581-8399-0ca99db70d54"
       }
     ],
     "r2_buckets": [

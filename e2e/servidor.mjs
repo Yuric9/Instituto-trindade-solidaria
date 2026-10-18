@@ -13,6 +13,7 @@ const build = spawnSync('npx', ['vite', 'build'], { stdio: 'inherit', shell: tru
 if (build.status !== 0) process.exit(build.status ?? 1);
 
 const vars = {
+  ADMIN_EMAIL: 'coordenacao@institutotrindadesolidaria.org.br', // o mesmo de e2e/ajuda.ts (o e-mail real fica no wrangler.jsonc)
   JWT_SECRET: 'segredo-so-para-os-testes-de-navegador-0123456789',
   ADMIN_INITIAL_PASSWORD: SENHA_ADMIN,
   SEED_DEMO_DATA: 'true',

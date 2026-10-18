@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { cloudflareTest } from '@cloudflare/vitest-plugin';
 import { defineConfig, type Plugin } from 'vitest/config';
-import { TEST_ADMIN_PASSWORD, TEST_JWT_SECRET } from './test/worker/constants.ts';
+import { TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD, TEST_JWT_SECRET } from './test/worker/constants.ts';
 
 // O Worker importa os arquivos .sql de migrations/ como texto (regra "Text" do wrangler.jsonc).
 // Nos testes quem resolve os imports é o Vite, então fazemos a mesma coisa aqui.
@@ -33,6 +33,7 @@ export default defineConfig({
             wrangler: { configPath: './wrangler.jsonc' },
             miniflare: {
               bindings: {
+                ADMIN_EMAIL: TEST_ADMIN_EMAIL,
                 JWT_SECRET: TEST_JWT_SECRET,
                 ADMIN_INITIAL_PASSWORD: TEST_ADMIN_PASSWORD,
                 SEED_DEMO_DATA: 'true',
