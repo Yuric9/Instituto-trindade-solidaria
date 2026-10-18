@@ -6,7 +6,7 @@
  * Portal Institucional & Painel Administrativo Completo
  */
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Navbar } from './components/public/Navbar';
 import { Hero } from './components/public/Hero';
 import { Sobre } from './components/public/Sobre';
@@ -219,6 +219,10 @@ export default function App() {
     }
   }, []);
 
+  // O que a equipe já editou nesta visita. A carga inicial do banco pode chegar atrasada
+  // (conexão lenta) e não pode apagar da tela uma edição feita antes dela chegar.
+  const editadoNaTela = useRef({ content: false, projects: false, gallery: false });
+
   // Carga e Sincronização Inicial de Conteúdos Públicos do Banco de Dados SQLite
   useEffect(() => {
     const loadDatabaseData = async () => {
@@ -229,15 +233,15 @@ export default function App() {
           api.getGallery().catch(() => null),
         ]);
 
-        if (dbContent) {
+        if (dbContent && !editadoNaTela.current.content) {
           setContent(dbContent);
           localStorage.setItem('its_content', JSON.stringify(dbContent));
         }
-        if (dbProjects && Array.isArray(dbProjects) && dbProjects.length > 0) {
+        if (dbProjects && Array.isArray(dbProjects) && dbProjects.length > 0 && !editadoNaTela.current.projects) {
           setProjects(dbProjects);
           localStorage.setItem('its_projects', JSON.stringify(dbProjects));
         }
-        if (dbGallery && Array.isArray(dbGallery) && dbGallery.length > 0) {
+        if (dbGallery && Array.isArray(dbGallery) && dbGallery.length > 0 && !editadoNaTela.current.gallery) {
           setGallery(dbGallery);
           localStorage.setItem('its_gallery', JSON.stringify(dbGallery));
         }
@@ -319,6 +323,7 @@ export default function App() {
   };
 
   const handleUpdateProjects = async (newProjects: ProjectCard[]) => {
+    editadoNaTela.current.projects = true;
     setProjects(newProjects);
     localStorage.setItem('its_projects', JSON.stringify(newProjects));
     try {
@@ -329,6 +334,7 @@ export default function App() {
   };
 
   const handleUpdateContent = async (newContent: SiteContent) => {
+    editadoNaTela.current.content = true;
     setContent(newContent);
     localStorage.setItem('its_content', JSON.stringify(newContent));
     try {
@@ -339,6 +345,7 @@ export default function App() {
   };
 
   const handleUpdateGallery = async (newPhotos: GalleryPhoto[]) => {
+    editadoNaTela.current.gallery = true;
     setGallery(newPhotos);
     localStorage.setItem('its_gallery', JSON.stringify(newPhotos));
     try {

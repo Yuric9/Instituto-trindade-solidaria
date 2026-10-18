@@ -10,6 +10,27 @@ test('projeto novo aparece na galeria, no site e nas inscrições', async ({ pag
   // No celular, o mesmo fluxo roda com outro nome de projeto (os testes compartilham o banco)
   const projeto = isMobile ? 'Aulas de Capoeira' : 'Aulas de Dança';
 
+  // Conexão lenta: a lista de projetos pedida ao abrir o painel só chega DEPOIS que o projeto novo
+  // foi salvo (aconteceu no GitHub Actions). A resposta atrasada não pode apagar o projeto da tela.
+  let liberarLista: () => void = () => {};
+  let avisarEntregue: () => void = () => {};
+  const projetoSalvo = new Promise<void>((r) => (liberarLista = r));
+  const listaAntigaEntregue = new Promise<void>((r) => (avisarEntregue = r));
+  let primeiraLista = true;
+  await page.route('**/api/projects', async (route) => {
+    if (route.request().method() === 'PUT') {
+      await route.continue();
+      liberarLista(); // a lista antiga chega logo depois de salvar
+      return;
+    }
+    if (!primeiraLista) return route.continue();
+    primeiraLista = false;
+    const resposta = await route.fetch(); // lida do banco agora, ainda sem o projeto novo
+    await projetoSalvo;
+    await route.fulfill({ response: resposta });
+    avisarEntregue();
+  });
+
   // 1. Cria o projeto pelo painel
   await abrirPainel(page);
   await abrirAba(page, /^Projetos/);
@@ -20,6 +41,7 @@ test('projeto novo aparece na galeria, no site e nas inscrições', async ({ pag
   // (o projeto novo já vem com uma foto padrão, que pode ser trocada depois)
   await formProjeto.getByRole('button', { name: 'Salvar Projeto' }).click();
   await expect(formProjeto).toBeHidden();
+  await listaAntigaEntregue;
 
   // 2. A galeria do painel oferece o projeto como categoria; adiciona uma foto nele
   await abrirAba(page, /^Galeria/);
