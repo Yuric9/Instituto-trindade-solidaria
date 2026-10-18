@@ -1,0 +1,75 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "novo-amanhecer",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-01",
+
+  // Site React compilado pelo Vite (npm run build → dist/).
+  // /api/* vai para o Worker; o resto é servido direto, com index.html nas rotas do React.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Banco D1 (já criado na conta da Cloudflare).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "novo-amanhecer-db",
+      "database_id": "e256256a-b66e-48df-85b4-80f4487fbf2d",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Fotos enviadas pelo painel (galeria e projetos). Servidas pelo Worker em /api/fotos/...
+  "r2_buckets": [
+    {
+      "binding": "FOTOS",
+      "bucket_name": "novo-amanhecer-fotos"
+    }
+  ],
+
+  // Backup automático do banco: todo dia às 06:00 UTC (03:00 em Brasília), guardado no R2
+  // em FOTOS/backups/. Ficam os últimos 30 dias. Ver worker/backup.ts.
+  "triggers": { "crons": ["0 6 * * *"] },
+
+  // Permite importar o arquivo .sql como texto (estrutura do banco).
+  "rules": [{ "type": "Text", "globs": ["**/*.sql"], "fallthrough": true }],
+
+  "observability": { "enabled": true },
+
+  // Variáveis públicas. Segredos (JWT_SECRET, ADMIN_INITIAL_PASSWORD, RESEND_API_KEY)
+  // ficam em Settings → Variables and Secrets no painel, NUNCA aqui.
+  "vars": {
+    "ADMIN_EMAIL": "coordenacao@novoamanhecer.org.br",
+    "EMAIL_FROM": "",
+    "SEED_DEMO_DATA": "false",
+    "DEV_MODE": "false"
+  },
+
+  // Prévias (sites de teste criados para cada branch/PR com "wrangler preview").
+  // Usam um banco D1 SEPARADO, com dados fictícios: nunca encostam nos dados reais.
+  // EMAIL_FROM vazio = prévias não enviam e-mails de verdade.
+  "previews": {
+    "vars": {
+      "ADMIN_EMAIL": "coordenacao@novoamanhecer.org.br",
+      "EMAIL_FROM": "",
+      "SEED_DEMO_DATA": "true",
+      "DEV_MODE": "false"
+    },
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_id": "c10e78ab-eedf-4b78-a51b-4fbcc9b777bb"
+      }
+    ],
+    "r2_buckets": [
+      {
+        "binding": "FOTOS",
+        "bucket_name": "novo-amanhecer-fotos-preview"
+      }
+    ]
+  }
+}
