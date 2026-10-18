@@ -16,7 +16,7 @@ export const VoluntarioModal: React.FC<VoluntarioModalProps> = ({ isOpen, onClos
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
-  const [area, setArea] = useState('Oficina de Ballet');
+  const [area, setArea] = useState('Treinos Esportivos');
   const [disponibilidade, setDisponibilidade] = useState('Sábados (Manhã)');
   const [consentimentoLgpd, setConsentimentoLgpd] = useState(true);
   const [hpSecurityCheck, setHpSecurityCheck] = useState('');
@@ -70,7 +70,7 @@ export const VoluntarioModal: React.FC<VoluntarioModalProps> = ({ isOpen, onClos
           </div>
           <div>
             <h3 id="voluntario-apoio-titulo" className="text-xl font-bold text-slate-900">Seja Voluntário(a)</h3>
-            <span className="text-xs text-slate-500">Associação Novo Amanhecer · Trindade/GO</span>
+            <span className="text-xs text-slate-500">Instituto Trindade Solidária · Trindade/GO</span>
           </div>
         </div>
 
@@ -150,13 +150,13 @@ export const VoluntarioModal: React.FC<VoluntarioModalProps> = ({ isOpen, onClos
                   onChange={(e) => setArea(e.target.value)}
                   className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-md focus:outline-none"
                 >
-                  <option value="Oficina de Ballet">Oficina de Ballet</option>
-                  <option value="Treinos de Futebol">Treinos de Futebol</option>
-                  <option value="Fotografia & Produção (Book)">Fotografia & Produção (Book)</option>
-                  <option value="Cozinha Comunitária & Alimentação">Cozinha Comunitária & Alimentação</option>
+                  <option value="Treinos Esportivos">Treinos Esportivos</option>
+                  <option value="Arrecadação e Entrega de Cestas">Arrecadação e Entrega de Cestas</option>
+                  <option value="Reformas e Construção">Reformas e Construção</option>
                   <option value="Apoio Pedagógico & Escolar">Apoio Pedagógico & Escolar</option>
+                  <option value="Oficinas e Cidadania">Oficinas e Cidadania</option>
                   <option value="Logística, Triagem & Eventos">Logística, Triagem & Eventos</option>
-                  <option value="Saúde Comunitária (Acolhimento)">Saúde Comunitária (Acolhimento)</option>
+                  <option value="Saúde Comunitária">Saúde Comunitária</option>
                 </select>
               </div>
 
@@ -202,7 +202,7 @@ export const VoluntarioModal: React.FC<VoluntarioModalProps> = ({ isOpen, onClos
                   className="mt-0.5 w-3.5 h-3.5 rounded text-brand focus:ring-brand border-slate-300 cursor-pointer"
                 />
                 <span className="leading-snug">
-                  Autorizo o contato da Associação para atividades de voluntariado, em conformidade com a <strong>LGPD (Lei 13.709/18)</strong>.
+                  Autorizo o contato do Instituto para atividades de voluntariado, em conformidade com a <strong>LGPD (Lei 13.709/18)</strong>.
                   {onOpenPrivacidade && (
                     <button
                       type="button"
@@ -301,7 +301,7 @@ export const ParceiroModal: React.FC<ParceiroModalProps> = ({ isOpen, onClose })
             </div>
             <h4 className="text-lg font-bold text-slate-900">Proposta Recebida!</h4>
             <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto">
-              Agradecemos a disposição em apoiar nossa associação. A diretoria entrará em contato para alinhar como sua parceria impactará diretamente nossas crianças e gestantes.
+              Agradecemos a disposição em apoiar o nosso instituto. A diretoria entrará em contato para alinhar como sua parceria impactará diretamente as famílias atendidas.
             </p>
             <button
               onClick={() => {
@@ -369,7 +369,7 @@ export const ParceiroModal: React.FC<ParceiroModalProps> = ({ isOpen, onClose })
               <textarea
                 id="apoio-como-gostaria-contribuir"
                 rows={3}
-                placeholder="Ex: Doação de kits de fraldas para o Book de Gestantes, lanches para os treinos de futebol, patrocínio de figurino de ballet ou brinquedos para o Dia das Crianças."
+                placeholder="Ex: Doação de alimentos para as cestas básicas, material de construção para reformas, bolas e uniformes para a iniciação esportiva ou serviços voluntários da sua empresa."
                 value={proposta}
                 onChange={(e) => setProposta(e.target.value)}
                 className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"

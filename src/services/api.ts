@@ -13,13 +13,13 @@ import {
 // A sessão fica num cookie HttpOnly definido pelo servidor: o JavaScript da página
 // não lê nem guarda o token. No navegador fica só o perfil (nome, e-mail, papel),
 // usado para desenhar a tela enquanto o servidor confirma a sessão em /auth/me.
-const USER_STORAGE_KEY = 'ana_auth_user';
+const USER_STORAGE_KEY = 'its_auth_user';
 
 // Chave antiga onde o token ficava salvo (versões anteriores). Removida ao carregar.
-const LEGACY_TOKEN_KEY = 'ana_jwt_token';
+const LEGACY_TOKEN_KEY = 'its_jwt_token';
 
 // Chaves antigas que guardavam dados pessoais (CPF, endereço, telefone) no navegador.
-export const LEGACY_PII_KEYS = ['ana_trindade_beneficiarios', 'ana_trindade_voluntarios', 'ana_trindade_admins'];
+export const LEGACY_PII_KEYS = ['its_beneficiarios', 'its_voluntarios', 'its_admins'];
 
 localStorage.removeItem(LEGACY_TOKEN_KEY);
 

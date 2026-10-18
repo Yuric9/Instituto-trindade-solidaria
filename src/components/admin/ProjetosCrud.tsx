@@ -81,7 +81,7 @@ export const ProjetosCrud: React.FC<ProjetosCrudProps> = ({ projects, beneficiar
         <div>
           <h2 className="text-lg font-bold text-ink">Cards de Projetos Sociais</h2>
           <p className="text-xs text-muted">
-            Gerencie os projetos exibidos no site público (Ballet, Futebol, Book Solidário, Festas).
+            Gerencie os projetos exibidos no site público (Esporte, Cestas, Moradia, Cidadania).
           </p>
         </div>
 
@@ -203,7 +203,7 @@ export const ProjetosCrud: React.FC<ProjetosCrudProps> = ({ projects, beneficiar
                   value={formData.titulo || ''}
                   onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
                   className="w-full px-3 py-2 text-xs sm:text-sm bg-paper border border-line rounded-xl"
-                  placeholder="Ex: Aulas de Ballet Solidário"
+                  placeholder="Ex: Centro de Iniciação Esportiva"
                 />
               </div>
 

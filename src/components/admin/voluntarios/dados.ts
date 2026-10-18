@@ -6,13 +6,13 @@ export type ModoGrafico = 'area' | 'disponibilidade';
 
 // Cores temáticas para as Áreas de Atuação dos voluntários
 export const AREA_COLORS: Record<string, string> = {
-  'Oficina de Ballet': '#ec4899', // Rosa
-  'Treinos de Futebol': '#059669', // Verde Esmeralda
-  'Fotografia & Produção (Book)': '#8b5cf6', // Violeta
-  'Cozinha Comunitária & Alimentação': '#f97316', // Laranja quente
-  'Apoio Pedagógico & Escolar': '#3b82f6', // Azul real
-  'Logística, Triagem & Eventos': '#eab308', // Amarelo Ouro
-  'Saúde Comunitária (Acolhimento)': '#06b6d4', // Ciano
+  'Treinos Esportivos': '#93c01f', // Verde do logo
+  'Arrecadação e Entrega de Cestas': '#00a6e6', // Azul-claro do logo
+  'Reformas e Construção': '#f97316', // Laranja
+  'Apoio Pedagógico & Escolar': '#00709a', // Azul da marca
+  'Oficinas e Cidadania': '#8b5cf6', // Violeta
+  'Logística, Triagem & Eventos': '#eab308', // Amarelo
+  'Saúde Comunitária': '#06b6d4', // Ciano
 };
 
 // Cores temáticas para a Disponibilidade da equipe
@@ -87,7 +87,7 @@ export function filtrarVoluntarios(
 export function linkWhatsapp(vol: Pick<Volunteer, 'nome' | 'telefone' | 'area'>): string {
   const cleanPhone = vol.telefone.replace(/\D/g, '');
   return `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(
-    `Olá ${vol.nome}! Aqui é da coordenação da Associação Novo Amanhecer (Trindade). Gostaria de falar sobre a nossa escala do ${vol.area}.`
+    `Olá ${vol.nome}! Aqui é da coordenação do Instituto Trindade Solidária (Trindade). Gostaria de falar sobre a nossa escala do ${vol.area}.`
   )}`;
 }
 
@@ -121,7 +121,7 @@ export const FORM_VAZIO: FormVoluntario = {
   nome: '',
   telefone: '',
   email: '',
-  area: 'Oficina de Ballet',
+  area: 'Treinos Esportivos',
   disponibilidade: 'Sábados (Manhã)',
   habilidades: '',
   observacoes: '',

@@ -1,5 +1,5 @@
-// Service Worker - Associação Novo Amanhecer PWA
-const CACHE_NAME = 'novo-amanhecer-v1.0.0';
+// Service Worker - Instituto Trindade Solidária PWA
+const CACHE_NAME = 'trindade-solidaria-v1.0.0';
 const OFFLINE_URL = '/index.html';
 
 const PRECACHE_ASSETS = [

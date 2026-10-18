@@ -24,7 +24,7 @@ export function api(path: string, { method = 'GET', body, cookie, ip, headers = 
   if (body !== undefined) h.set('content-type', 'application/json');
   if (cookie) h.set('cookie', cookie);
   return exports.default.fetch(
-    new Request(`https://novoamanhecer.test/api${path}`, {
+    new Request(`https://trindadesolidaria.test/api${path}`, {
       method,
       headers: h,
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -32,10 +32,10 @@ export function api(path: string, { method = 'GET', body, cookie, ip, headers = 
   );
 }
 
-/** "ana_token=..." a partir do Set-Cookie da resposta (o que o navegador guardaria). */
+/** "its_token=..." a partir do Set-Cookie da resposta (o que o navegador guardaria). */
 export function sessionCookie(res: Response): string {
   const setCookie = res.headers.get('set-cookie') ?? '';
-  const match = setCookie.match(/ana_token=[^;]+/);
+  const match = setCookie.match(/its_token=[^;]+/);
   if (!match) throw new Error(`Resposta sem cookie de sessão: "${setCookie}"`);
   return match[0];
 }
@@ -67,9 +67,17 @@ export function beneficiaryForm(overrides: Record<string, unknown> = {}) {
     telefone: '(62) 99999-0000',
     email: '',
     endereco: 'Rua de Teste, 10 - Trindade - GO',
-    projeto: 'Aulas de Ballet Solidário',
+    projeto: 'Centro de Iniciação Esportiva',
     consentimento_lgpd: true,
     hp_security_check: '',
+    // Ficha do atleta (obrigatória na iniciação esportiva; o atleta acima é menor de idade)
+    ficha: {
+      rg: '1234567',
+      sexo: 'Feminino',
+      categoria: 'Sub-11',
+      responsavel: { nome: 'Joana de Teste', rg: '7654321', cpf: '529.982.247-25', telefone: '(62) 98888-1111', endereco: '' },
+      termos_aceitos: true,
+    },
     ...overrides,
   };
 }

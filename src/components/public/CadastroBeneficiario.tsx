@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   UserPlus,
   CheckCircle2,
@@ -25,6 +25,8 @@ import {
   formatCEP,
   cleanDigits,
 } from '../../utils/validation';
+import { FICHA_VAZIA, ehIniciacaoEsportiva, ehMenorDeIdade, validarFicha, type FichaEsportiva } from '../../utils/ficha';
+import { FichaAtleta } from './FichaAtleta';
 
 interface CadastroBeneficiarioProps {
   projects: ProjectCard[];
@@ -32,6 +34,8 @@ interface CadastroBeneficiarioProps {
   onAddBeneficiary: (beneficiary: Beneficiary) => void;
   defaultProject?: string;
   onOpenPrivacidade?: () => void;
+  /** WhatsApp do Instituto (vem do conteúdo do site), para quem já tem cadastro pedir atualização. */
+  whatsapp: string;
 }
 
 export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
@@ -40,6 +44,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
   onAddBeneficiary,
   defaultProject,
   onOpenPrivacidade,
+  whatsapp,
 }) => {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
@@ -62,8 +67,15 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
   const [manualAddressMode, setManualAddressMode] = useState(false);
   const [manualEndereco, setManualEndereco] = useState('');
 
-  const [projeto, setProjeto] = useState(defaultProject || 'Aulas de Ballet Solidário');
+  const [projeto, setProjeto] = useState(defaultProject || 'Centro de Iniciação Esportiva');
   const [observacoes, setObservacoes] = useState('');
+  const [ficha, setFicha] = useState<FichaEsportiva>(FICHA_VAZIA);
+  const esporte = ehIniciacaoEsportiva(projeto);
+
+  // "Inscrever-se" num card de área já deixa a área escolhida aqui
+  useEffect(() => {
+    if (defaultProject) setProjeto(defaultProject);
+  }, [defaultProject]);
 
   // Estados de Segurança e LGPD
   const [consentimentoLgpd, setConsentimentoLgpd] = useState(true);
@@ -131,9 +143,9 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
     }
   };
 
-  // Preencher atalho com o CEP da Associação (Setor Ponta Kayana)
+  // Preencher atalho com o CEP do Instituto (Setor Solange)
   const handleQuickFillSedeCep = () => {
-    const sedeCep = '75384-155';
+    const sedeCep = '75392-269';
     setCep(sedeCep);
     fetchAddressByCep(sedeCep);
   };
@@ -184,6 +196,15 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
       return;
     }
 
+    // Ficha do atleta (mesmas regras que o servidor confere)
+    if (esporte) {
+      const erroFicha = validarFicha(ficha, nascimento);
+      if (erroFicha) {
+        setSubmitError(erroFicha);
+        return;
+      }
+    }
+
     // 3. Controle de Duplicidade Real por CPF limpo
     const rawCpf = cleanDigits(cpf);
     const foundExisting = beneficiaries.find(
@@ -213,6 +234,9 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
         observacoes: observacoes.trim(),
         consentimento_lgpd: true,
         hp_security_check: hpSecurityCheck,
+        ...(esporte && {
+          ficha: { ...ficha, responsavel: ehMenorDeIdade(nascimento) ? ficha.responsavel : undefined },
+        }),
       });
 
       const newBeneficiary: Beneficiary = {
@@ -259,6 +283,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
       setCepError('');
       setManualEndereco('');
       setObservacoes('');
+      setFicha(FICHA_VAZIA);
     } catch (err: any) {
       setSubmitError(err.message || 'Erro ao enviar cadastro ao servidor.');
     } finally {
@@ -267,22 +292,15 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
   };
 
   return (
-    <section id="cadastro" className="py-16 sm:py-24 bg-white border-t border-slate-100">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="cadastro" className="border-t border-line bg-white py-14 sm:py-24">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Cabeçalho */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="flex items-center justify-center gap-2 text-xs font-bold text-brand mb-2">
-            <span>Inscrição Solidária</span>
-            <span aria-hidden="true">·</span>
-            <span>Sem Custos</span>
-            <span aria-hidden="true">·</span>
-            <span>Trindade - GO</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-            Cadastro de Beneficiários da Comunidade
-          </h2>
-          <p className="mt-3 text-sm sm:text-base text-slate-600">
-            Cadastre seu filho(a), você mesma (para o Book de Gestante) ou sua família para nossas atividades. Nosso acolhimento é 100% gratuito.
+        <div className="mb-10 flex flex-col gap-3">
+          <span className="kicker">Inscrição gratuita</span>
+          <h2 className="section-title">Faça sua inscrição</h2>
+          <p className="max-w-2xl text-base leading-relaxed text-body">
+            Inscreva seu filho(a) no Centro de Iniciação Esportiva ou cadastre sua família para as ações do Instituto.
+            Tudo é 100% gratuito e a equipe entra em contato pelo WhatsApp.
           </p>
         </div>
 
@@ -318,7 +336,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
 
                 <div className="mt-4 pt-3 border-t border-line flex flex-wrap items-center gap-3">
                   <a
-                    href="https://wa.me/5562993418820?text=Ol%C3%A1!%20Gostaria%20de%20consultar%20ou%20atualizar%20meu%20cadastro%20na%20Associa%C3%A7%C3%A3o%20Novo%20Amanhecer."
+                    href={`https://wa.me/55${cleanDigits(whatsapp)}?text=${encodeURIComponent('Olá! Gostaria de consultar ou atualizar meu cadastro no Instituto Trindade Solidária.')}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-md transition-colors"
@@ -352,7 +370,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                   Cadastro Enviado com Sucesso!
                 </span>
                 <h3 className="text-xl font-bold text-slate-900 mt-0.5">
-                  Bem-vindo(a) à Associação Novo Amanhecer!
+                  Bem-vindo(a) ao Instituto Trindade Solidária!
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-700 mt-2">
                   Recebemos a inscrição de <strong>{submittedBeneficiary.nome}</strong> para o projeto{' '}
@@ -360,7 +378,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                   <strong className="text-brand">Pendente</strong> e está na fila de aprovação da nossa coordenação.
                 </p>
                 <div className="mt-3 text-xs text-slate-600 bg-white/80 p-3 rounded-md border border-emerald-200">
-                  Nossa equipe entrará em contato via WhatsApp no número <strong>{submittedBeneficiary.telefone}</strong> para confirmar a turma, data do ensaio ou entrega dos materiais.
+                  Nossa equipe entrará em contato via WhatsApp no número <strong>{submittedBeneficiary.telefone}</strong> para confirmar a categoria, os horários ou a entrega dos benefícios.
                 </div>
                 <div className="mt-4 flex gap-3">
                   <button
@@ -377,19 +395,38 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
         )}
 
         {/* Formulário Principal de Cadastro */}
-        <div className="bg-sand p-6 sm:p-10 rounded-lg border border-line shadow-xs">
+        <div className="rounded-md border-t-8 border-brand-dark bg-sand p-6 shadow-xs sm:p-10">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Área de interesse (primeiro: decide se a ficha do atleta aparece) */}
+            <div>
+              <label htmlFor="cadastro-projeto-social-desejado" className="mb-1.5 block text-xs font-bold uppercase tracking-wide text-brand-dark">
+                Em qual ação você quer se inscrever? *
+              </label>
+              <select
+                id="cadastro-projeto-social-desejado"
+                value={projeto}
+                onChange={(e) => setProjeto(e.target.value)}
+                className="w-full rounded-md border-2 border-brand-dark bg-white px-4 py-3 text-sm font-bold text-brand-dark shadow-2xs focus:outline-none focus:ring-2 focus:ring-brand"
+              >
+                {activeProjects.map((p) => (
+                  <option key={p.id} value={p.titulo}>
+                    {p.titulo}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Nome Completo e CPF */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="cadastro-nome-completo" className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Nome Completo *
+                  {esporte ? 'Nome completo do(a) atleta *' : 'Nome Completo *'}
                 </label>
                 <input
                   id="cadastro-nome-completo"
                   type="text"
                   required
-                  placeholder="Nome do(a) participante ou responsável"
+                  placeholder={esporte ? "Nome do(a) atleta" : "Nome do(a) participante ou responsável"}
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                   className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-brand shadow-2xs"
@@ -398,7 +435,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
 
               <div>
                 <label htmlFor="cadastro-cpf-validacao-real" className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
-                  <span>CPF (com validação real) *</span>
+                  <span>{esporte ? 'CPF do(a) atleta *' : 'CPF *'}</span>
                   <span className="text-[10px] text-slate-600 font-normal">Apenas números</span>
                 </label>
                 <input
@@ -490,10 +527,10 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                     type="button"
                     onClick={handleQuickFillSedeCep}
                     className="inline-flex items-center gap-1 text-[11px] font-bold text-brand hover:text-brand bg-sand hover:bg-brand-soft border border-line px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
-                    title="Preencher com o CEP do Setor Ponta Kayana"
+                    title="Preencher com o CEP do Setor Solange"
                   >
                     <Sparkles className="w-3 h-3 text-brand" />
-                    <span>CEP Ponta Kayana (75384-155)</span>
+                    <span>CEP Setor Solange (75392-269)</span>
                   </button>
                   <button
                     type="button"
@@ -580,7 +617,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                         id="cadastro-rua-avenida-alameda"
                         type="text"
                         required
-                        placeholder="Ex: Alameda das Rosas, Rua 12, etc."
+                        placeholder="Ex: Rua Ana Alves, Rua 12, etc."
                         value={logradouro}
                         onChange={(e) => setLogradouro(e.target.value)}
                         className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-brand shadow-2xs"
@@ -630,7 +667,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                         id="cadastro-bairro-setor"
                         type="text"
                         required
-                        placeholder="Ex: Setor Ponta Kayana"
+                        placeholder="Ex: Setor Solange"
                         value={bairro}
                         onChange={(e) => setBairro(e.target.value)}
                         className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-brand shadow-2xs"
@@ -683,24 +720,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
               )}
             </div>
 
-            {/* Projeto de Interesse */}
-            <div>
-              <label htmlFor="cadastro-projeto-social-desejado" className="block text-xs font-bold text-slate-700 mb-1.5">
-                Projeto Social Desejado *
-              </label>
-              <select
-                id="cadastro-projeto-social-desejado"
-                value={projeto}
-                onChange={(e) => setProjeto(e.target.value)}
-                className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-brand shadow-2xs text-slate-900 font-semibold"
-              >
-                {activeProjects.map((p) => (
-                  <option key={p.id} value={p.titulo}>
-                    {p.titulo} ({p.idade_publico || 'Acolhimento Comunitário'})
-                  </option>
-                ))}
-              </select>
-            </div>
+            {esporte && <FichaAtleta ficha={ficha} onChange={setFicha} nascimento={nascimento} />}
 
             {/* Observações */}
             <div>
@@ -710,7 +730,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
               <textarea
                 id="cadastro-observacoes-informacoes-importantes"
                 rows={3}
-                placeholder="Ex: Tamanho de roupa/calçado para o ballet ou futebol; meses de gestação para o Book Solidário; restrições de saúde..."
+                placeholder="Ex: categoria do atleta (Sub-09 a Sub-17, Feminino); restrições médicas ou alergias; número de pessoas na família; necessidade de acessibilidade na moradia..."
                 value={observacoes}
                 onChange={(e) => setObservacoes(e.target.value)}
                 className="w-full px-4 py-2.5 text-xs sm:text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-brand shadow-2xs text-slate-800"
@@ -741,7 +761,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                   className="mt-0.5 w-6 h-6 sm:w-4 sm:h-4 shrink-0 rounded text-brand focus:ring-brand border-slate-300 cursor-pointer"
                 />
                 <span className="leading-relaxed">
-                  Autorizo e concordo com o tratamento dos dados pessoais e cadastrais informados acima pela <strong>Associação Beneficente Novo Amanhecer</strong> (CNPJ 35.157.094/0001-91) para fins exclusivos de inscrição, organização de turmas e prestação de contas dos projetos sociais, em integral conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)</strong>.
+                  Autorizo e concordo com o tratamento dos dados pessoais e cadastrais informados acima pelo <strong>Instituto Trindade Solidária</strong> (CNPJ 45.698.518/0001-89) para fins exclusivos de inscrição, organização das atividades e prestação de contas das ações sociais, em integral conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)</strong>.
                   {onOpenPrivacidade && (
                     <button
                       type="button"
@@ -767,7 +787,7 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 px-6 text-sm font-bold text-white bg-brand disabled:opacity-60 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-lima min-h-[56px] w-full text-base"
               >
                 {isSubmitting ? (
                   <>
@@ -777,12 +797,12 @@ export const CadastroBeneficiario: React.FC<CadastroBeneficiarioProps> = ({
                 ) : (
                   <>
                     <UserPlus className="w-5 h-5" />
-                    <span>Confirmar Inscrição Gratuita</span>
+                    <span>Enviar inscrição</span>
                   </>
                 )}
               </button>
               <p className="text-[11px] text-slate-600 text-center mt-2">
-                Ao enviar, seu cadastro entrará na fila de análise da Associação Novo Amanhecer. Seus dados estão seguros e protegidos.
+                Ao enviar, seu cadastro entrará na fila de análise do Instituto Trindade Solidária. Seus dados estão seguros e protegidos.
               </p>
             </div>
           </form>

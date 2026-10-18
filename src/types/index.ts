@@ -1,3 +1,5 @@
+import type { FichaEsportiva } from '../utils/ficha';
+
 export type BeneficiaryStatus =
   | 'Pendente'
   | 'Em análise'
@@ -19,6 +21,8 @@ export interface Beneficiary {
   criado_em: string;
   atualizado_em?: string;
   motivo_status?: string;
+  /** Ficha do Centro de Iniciação Esportiva (só nas inscrições do esporte). */
+  ficha?: FichaEsportiva;
 }
 
 export interface ProjectCard {
@@ -39,7 +43,7 @@ export interface GalleryPhoto {
   foto_url: string;
   legenda: string;
   ordem: number;
-  /** Código da categoria: futebol, ballet, book, festas, geral ou o id de um projeto (ver utils/categoriasGaleria) */
+  /** Categoria: o id de um projeto (ex.: proj-esporte) ou "geral" (ver utils/categoriasGaleria) */
   categoria?: string;
   data?: string;
 }
@@ -54,7 +58,7 @@ export interface InstagramPost {
   media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL';
   location?: string;
   tags: string[];
-  category: 'futebol' | 'ballet' | 'book' | 'festas' | 'geral';
+  category: string;
 }
 
 export interface SiteContent {
@@ -116,13 +120,13 @@ export interface AdminUser {
 }
 
 export type VolunteerArea =
-  | 'Oficina de Ballet'
-  | 'Treinos de Futebol'
-  | 'Fotografia & Produção (Book)'
-  | 'Cozinha Comunitária & Alimentação'
+  | 'Treinos Esportivos'
+  | 'Arrecadação e Entrega de Cestas'
+  | 'Reformas e Construção'
   | 'Apoio Pedagógico & Escolar'
+  | 'Oficinas e Cidadania'
   | 'Logística, Triagem & Eventos'
-  | 'Saúde Comunitária (Acolhimento)';
+  | 'Saúde Comunitária';
 
 export type VolunteerAvailability =
   | 'Sábados (Manhã)'

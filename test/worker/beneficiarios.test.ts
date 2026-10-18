@@ -77,6 +77,69 @@ describe('formulário público de inscrição', () => {
   });
 });
 
+describe('ficha da iniciação esportiva', () => {
+  const ficha = beneficiaryForm().ficha;
+
+  it.each([
+    ['sem ficha', { ficha: undefined }],
+    ['sem categoria', { ficha: { ...ficha, categoria: '' } }],
+    ['categoria que não existe', { ficha: { ...ficha, categoria: 'Sub-99' } }],
+    ['menino na categoria feminina', { ficha: { ...ficha, sexo: 'Masculino', categoria: 'Feminino Livre' } }],
+    ['menor sem responsável', { ficha: { ...ficha, responsavel: undefined } }],
+    ['responsável com CPF inválido', { ficha: { ...ficha, responsavel: { ...ficha.responsavel, cpf: '111.111.111-11' } } }],
+    ['sem aceitar os termos', { ficha: { ...ficha, termos_aceitos: false } }],
+  ])('recusa inscrição no esporte %s', async (_caso, overrides) => {
+    const before = await countBeneficiaries();
+    const res = await api('/beneficiaries', { method: 'POST', body: beneficiaryForm(overrides) });
+    expect(res.status).toBe(400);
+    expect(await countBeneficiaries()).toBe(before);
+  });
+
+  it('adulto no esporte não precisa de responsável', async () => {
+    const res = await api('/beneficiaries', {
+      method: 'POST',
+      body: beneficiaryForm({ nascimento: '2000-01-01', ficha: { ...ficha, categoria: 'Feminino Livre', responsavel: undefined } }),
+    });
+    expect(res.status).toBe(201);
+  });
+
+  it('outras áreas não pedem ficha e gravam a coluna vazia', async () => {
+    const res = await api('/beneficiaries', {
+      method: 'POST',
+      body: beneficiaryForm({ projeto: 'Cestas Básicas e Primeira Necessidade', ficha: undefined }),
+    });
+    expect(res.status).toBe(201);
+    const { id } = await res.json<{ id: string }>();
+    const row = await env.DB.prepare('SELECT ficha_json FROM beneficiaries WHERE id = ?').bind(id).first<{ ficha_json: string | null }>();
+    expect(row?.ficha_json).toBeNull();
+  });
+
+  it('grava só os campos conhecidos e devolve a ficha para a coordenação', async () => {
+    const form = beneficiaryForm({ ficha: { ...ficha, campo_estranho: 'x' } });
+    const { id } = await (await api('/beneficiaries', { method: 'POST', body: form })).json<{ id: string }>();
+    const admin = await login();
+    const lista = await (await api('/beneficiaries', { cookie: admin.cookie })).json<any[]>();
+    const salvo = lista.find((b) => b.id === id);
+    expect(salvo.ficha).toMatchObject({ categoria: 'Sub-11', sexo: 'Feminino', rg: '1234567', termos_aceitos: true });
+    expect(salvo.ficha.responsavel.cpf).toBe('529.982.247-25');
+    expect(salvo.ficha.termos_versao).toBeTruthy();
+    expect(salvo.ficha).not.toHaveProperty('campo_estranho');
+    expect(salvo).not.toHaveProperty('ficha_json');
+  });
+
+  it('voluntário vê a categoria, mas não os documentos do atleta e do responsável', async () => {
+    const form = beneficiaryForm();
+    const { id } = await (await api('/beneficiaries', { method: 'POST', body: form })).json<{ id: string }>();
+    const cookie = await loginAs('voluntario');
+    const lista = await (await api('/beneficiaries', { cookie })).json<any[]>();
+    const visto = lista.find((b) => b.id === id);
+    expect(visto.ficha.categoria).toBe('Sub-11');
+    expect(visto.ficha.rg).toBe('Protegido (LGPD)');
+    expect(visto.ficha.responsavel.cpf).not.toContain('529.982');
+    expect(visto.ficha.responsavel.telefone).not.toContain('8888-1111');
+  });
+});
+
 describe('LGPD: quem vê os dados dos beneficiários', () => {
   it('visitante sem login não vê nada', async () => {
     expect((await api('/beneficiaries')).status).toBe(401);

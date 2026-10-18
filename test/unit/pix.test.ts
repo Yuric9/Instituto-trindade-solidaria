@@ -32,17 +32,23 @@ describe('PIX copia e cola (BR Code)', () => {
   });
 
   it('gera um código com CRC correto e os campos esperados', () => {
-    const payload = generatePixPayload({ key: 'contato@novoamanhecer.org.br', amount: 25.5 });
+    const payload = generatePixPayload({ key: 'contato@exemplo.org.br', amount: 25.5 });
     expect(payload.slice(-4)).toBe(crc16(payload.slice(0, -4)));
 
     const f = parseTlv(payload);
     expect(f['00']).toBe('01');
-    expect(f['26']).toBe('0014br.gov.bcb.pix0128contato@novoamanhecer.org.br');
+    expect(f['26']).toBe('0014br.gov.bcb.pix0122contato@exemplo.org.br');
     expect(f['53']).toBe('986'); // real
     expect(f['54']).toBe('25.50');
     expect(f['58']).toBe('BR');
-    expect(f['59']).toBe('ASSOC NOVO AMANHECER');
+    expect(f['59']).toBe('INST TRINDADE SOLIDARIA');
     expect(f['60']).toBe('TRINDADE');
+  });
+
+  it('a chave CNPJ do Instituto vai só com os dígitos', () => {
+    const payload = generatePixPayload({ key: '45.698.518/0001-89', name: 'INST TRINDADE SOLIDARIA', city: 'TRINDADE' });
+    expect(payload.slice(-4)).toBe(crc16(payload.slice(0, -4)));
+    expect(parseTlv(payload)['26']).toBe('0014br.gov.bcb.pix011445698518000189');
   });
 
   it('sem valor, deixa o campo 54 de fora (quem doa escolhe o valor)', () => {

@@ -29,7 +29,7 @@ test('a coordenação aprova uma inscrição e a mudança fica gravada', async (
       telefone: '(62) 99999-0000',
       email: '',
       endereco: 'Rua de Teste, 10 - Trindade - GO',
-      projeto: 'Aulas de Ballet Solidário',
+      projeto: 'Cestas Básicas e Primeira Necessidade',
       consentimento_lgpd: true,
       hp_security_check: '',
     },

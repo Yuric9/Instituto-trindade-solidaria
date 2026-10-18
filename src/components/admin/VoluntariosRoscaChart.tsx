@@ -125,7 +125,7 @@ export const VoluntariosRoscaChart: React.FC<VoluntariosRoscaChartProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `escala_voluntarios_novo_amanhecer_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `escala_voluntarios_trindade_solidaria_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

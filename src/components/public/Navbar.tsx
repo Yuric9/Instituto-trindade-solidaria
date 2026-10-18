@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Menu, X, Download } from 'lucide-react';
 import { SiteContent } from '../../types';
-import { NovoAmanhecerLogo, NovoAmanhecerMark } from '../brand/NovoAmanhecerLogo';
+import { Logo } from '../brand/Logo';
+import { INSTITUTO } from '../../data/instituto';
 import { usePwa } from '../../pwa/usePwa';
 
 interface NavbarProps {
@@ -13,8 +14,8 @@ interface NavbarProps {
 
 const links = [
   { label: 'Quem somos', href: '#sobre' },
-  { label: 'Projetos', href: '#projetos' },
-  { label: 'Destaques', href: '#destaques' },
+  { label: 'Atuação', href: '#projetos' },
+  { label: 'Inscrição', href: '#cadastro' },
   { label: 'Transparência', href: '#transparencia' },
   { label: 'Contato', href: '#contato' },
 ];
@@ -30,40 +31,39 @@ export const Navbar: React.FC<NavbarProps> = ({ content, onOpenCadastro, onOpenA
 
   return (
     <>
-      {/* Faixa superior (só no computador) */}
-      <aside aria-label="Contatos da associação" className="hidden bg-brand-dark text-[13px] text-brand-light lg:block">
-        <div className="container-site flex h-10 items-center justify-between">
+      {/* Faixa superior (só no computador): contatos sobre o azul petróleo, com o corte verde-limão */}
+      <aside aria-label="Contatos do instituto" className="relative hidden overflow-hidden bg-brand-dark text-[13px] text-brand-light lg:block">
+        <div aria-hidden="true" className="absolute inset-y-0 right-0 w-56 -skew-x-[25deg] translate-x-16 bg-lima" />
+        <div className="container-site relative flex h-10 items-center justify-between">
           <span>
-            CNPJ {content.contato_cnpj} · Setor Ponta Kayana, {content.contato_cidade} — GO
+            CNPJ {content.contato_cnpj} · Setor Solange, {content.contato_cidade} — GO
           </span>
-          <div className="flex gap-6">
+          <div className="flex gap-6 pr-36">
             {wa && (
-              <a href={`https://wa.me/55${wa}`} target="_blank" rel="noreferrer" className="text-white hover:opacity-80">
+              <a href={`https://wa.me/55${wa}`} target="_blank" rel="noreferrer" className="font-semibold text-white hover:opacity-80">
                 WhatsApp {content.contato_whatsapp}
               </a>
             )}
-            <a href={content.instagram_url} target="_blank" rel="noreferrer" className="text-white hover:opacity-80">
-              Instagram @anovoamanhecer
+            <a href={content.instagram_url} target="_blank" rel="noreferrer" className="font-semibold text-white hover:opacity-80">
+              Instagram {INSTITUTO.instagram}
             </a>
           </div>
         </div>
       </aside>
 
-      <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur">
-        <div className="container-site flex h-16 items-center justify-between gap-6 lg:h-[84px]">
-          <a href="#inicio" className="rounded-md" aria-label="Associação Novo Amanhecer — início">
-            <span className="flex items-center gap-2.5 lg:hidden">
-              <NovoAmanhecerMark size={36} className="shrink-0" />
-              <span className="text-[15px] font-extrabold text-brand-dark">Novo Amanhecer</span>
-            </span>
-            <span className="hidden lg:block">
-              <NovoAmanhecerLogo size="md" />
-            </span>
+      <header className="sticky top-0 z-40 border-b-4 border-lima bg-white/95 backdrop-blur">
+        <div className="container-site flex h-[72px] items-center justify-between gap-6 lg:h-[88px]">
+          <a href="#inicio" className="rounded-md" aria-label={`${INSTITUTO.nome} — início`}>
+            <Logo className="h-12 lg:h-[62px]" />
           </a>
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Menu principal">
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Menu principal">
             {links.map((link) => (
-              <a key={link.href} href={link.href} className="text-[15px] font-semibold text-ink hover:text-brand">
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-[14px] font-bold uppercase tracking-wide text-brand-dark hover:text-brand"
+              >
                 {link.label}
               </a>
             ))}
@@ -75,21 +75,18 @@ export const Navbar: React.FC<NavbarProps> = ({ content, onOpenCadastro, onOpenA
                 Painel
               </button>
             )}
-            <button onClick={() => onOpenCadastro()} className="btn-secondary">
-              Inscrever-se
-            </button>
-            <a href="#como-ajudar" className="btn-sun px-6">
+            <a href="#como-ajudar" className="btn-lima px-6">
               Doar
             </a>
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <a href="#como-ajudar" onClick={close} className="btn-sun px-4 text-sm">
+            <a href="#como-ajudar" onClick={close} className="btn-lima px-4 text-sm">
               Doar
             </a>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex h-11 w-11 items-center justify-center rounded-md border border-line-strong bg-white text-brand-dark"
+              className="flex h-11 w-11 items-center justify-center rounded-md bg-brand-dark text-white"
               aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
               aria-expanded={mobileMenuOpen}
             >
@@ -106,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ content, onOpenCadastro, onOpenA
                   key={link.href}
                   href={link.href}
                   onClick={close}
-                  className="border-b border-line py-3 text-base font-semibold text-ink last:border-b-0"
+                  className="border-b border-line py-3 text-base font-bold uppercase tracking-wide text-brand-dark last:border-b-0"
                 >
                   {link.label}
                 </a>
@@ -120,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ content, onOpenCadastro, onOpenA
                 }}
                 className="btn-primary w-full"
               >
-                Inscrever uma criança
+                Fazer inscrição
               </button>
               {canInstall && (
                 <button

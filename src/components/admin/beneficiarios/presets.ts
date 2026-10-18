@@ -1,9 +1,9 @@
 // Botões de filtro rápido por projeto (ícone, nome e cores de cada atalho).
-import { Camera, Gift, Layers, Sparkles, Trophy, type LucideIcon } from 'lucide-react';
+import { BookOpen, Home, Layers, ShoppingBasket, Trophy, type LucideIcon } from 'lucide-react';
 import { isProjectMatch, type contarPorProjeto } from './filtros';
 
 export interface ProjetoPreset {
-  id: 'todos' | 'futebol' | 'ballet' | 'book' | 'festas';
+  id: 'todos' | 'esporte' | 'cestas' | 'moradia' | 'cidadania';
   label: string;
   shortLabel: string;
   /** Nome completo do projeto (usado como padrão ao cadastrar e no banner) */
@@ -26,44 +26,44 @@ export function montarPresets(counts: ReturnType<typeof contarPorProjeto>): Proj
       count: counts.todos,
     },
     {
-      id: 'futebol',
-      label: 'Apenas Futebol',
-      shortLabel: 'Futebol',
-      projectName: 'Escolinha de Futebol Comunitário',
+      id: 'esporte',
+      label: 'Apenas Esporte',
+      shortLabel: 'Esporte',
+      projectName: 'Centro de Iniciação Esportiva',
       icon: Trophy,
-      activeBtnClass: 'bg-emerald-700 text-white border-emerald-700 shadow-xs ring-2 ring-emerald-300 font-bold',
-      inactiveBtnClass: 'bg-white text-emerald-800 hover:bg-emerald-50 border-emerald-200',
-      count: counts.futebol,
+      activeBtnClass: 'bg-lime-700 text-white border-lime-700 shadow-xs ring-2 ring-lime-300 font-bold',
+      inactiveBtnClass: 'bg-white text-lime-800 hover:bg-lime-50 border-lime-200',
+      count: counts.esporte,
     },
     {
-      id: 'ballet',
-      label: 'Apenas Ballet',
-      shortLabel: 'Ballet',
-      projectName: 'Aulas de Ballet Solidário',
-      icon: Sparkles,
-      activeBtnClass: 'bg-rose-600 text-white border-rose-600 shadow-xs ring-2 ring-rose-300 font-bold',
-      inactiveBtnClass: 'bg-white text-rose-800 hover:bg-rose-50 border-rose-200',
-      count: counts.ballet,
+      id: 'cestas',
+      label: 'Apenas Cestas',
+      shortLabel: 'Cestas',
+      projectName: 'Cestas Básicas e Primeira Necessidade',
+      icon: ShoppingBasket,
+      activeBtnClass: 'bg-sky-700 text-white border-sky-700 shadow-xs ring-2 ring-sky-300 font-bold',
+      inactiveBtnClass: 'bg-white text-sky-800 hover:bg-sky-50 border-sky-200',
+      count: counts.cestas,
     },
     {
-      id: 'book',
-      label: 'Apenas Book Gestante',
-      shortLabel: 'Book Gestante',
-      projectName: 'Projeto Book Solidário para Gestantes',
-      icon: Camera,
-      activeBtnClass: 'bg-purple-600 text-white border-purple-600 shadow-xs ring-2 ring-purple-300 font-bold',
-      inactiveBtnClass: 'bg-white text-purple-800 hover:bg-purple-50 border-purple-200',
-      count: counts.book,
+      id: 'moradia',
+      label: 'Apenas Moradia',
+      shortLabel: 'Moradia',
+      projectName: 'Moradia Digna',
+      icon: Home,
+      activeBtnClass: 'bg-orange-700 text-white border-orange-700 shadow-xs ring-2 ring-orange-300 font-bold',
+      inactiveBtnClass: 'bg-white text-orange-800 hover:bg-orange-50 border-orange-200',
+      count: counts.moradia,
     },
     {
-      id: 'festas',
-      label: 'Apenas Festas & Ações',
-      shortLabel: 'Festas',
-      projectName: 'Festas em Datas Comemorativas',
-      icon: Gift,
-      activeBtnClass: 'bg-amber-700 text-white border-amber-700 shadow-xs ring-2 ring-amber-300 font-bold',
-      inactiveBtnClass: 'bg-white text-amber-800 hover:bg-amber-50 border-amber-200',
-      count: counts.festas,
+      id: 'cidadania',
+      label: 'Apenas Cidadania',
+      shortLabel: 'Cidadania',
+      projectName: 'Educação e Cidadania',
+      icon: BookOpen,
+      activeBtnClass: 'bg-violet-700 text-white border-violet-700 shadow-xs ring-2 ring-violet-300 font-bold',
+      inactiveBtnClass: 'bg-white text-violet-800 hover:bg-violet-50 border-violet-200',
+      count: counts.cidadania,
     },
   ];
 }

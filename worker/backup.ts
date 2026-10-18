@@ -51,7 +51,7 @@ export async function montarBackup(agora: Date) {
   return {
     versao: '2.0.0',
     data_backup: agora.toISOString(),
-    associacao: 'Associação Novo Amanhecer - Trindade/GO',
+    associacao: 'Instituto Trindade Solidária - Trindade/GO',
     origem: 'automatico',
     beneficiarios,
     projetos,

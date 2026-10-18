@@ -1,8 +1,8 @@
 /**
- * Destaques da página inicial ("Acontece na associação").
+ * Destaques da página inicial ("Acontece no instituto").
  * O primeiro item aparece grande; os dois seguintes, em cards menores.
  * `data` é opcional: só aparece no site quando estiver preenchida (confirme as datas antes de publicar).
- * `cor`: 'sol' (dourado), 'marca' (azul) ou 'destaque' (dourado forte, para o item principal).
+ * `cor`: 'sol' (verde-limão claro), 'marca' (azul) ou 'destaque' (verde-limão forte, para o item principal).
  */
 export interface Destaque {
   id: string;
@@ -16,33 +16,8 @@ export interface Destaque {
   link?: string;
 }
 
-export const DESTAQUES: Destaque[] = [
-  {
-    id: 'river-titulo',
-    categoria: 'Futebol',
-    titulo: 'Escolinha River Trindade conquista o título da temporada',
-    foto_url: '/fotos/galeria-futebol-taca.jpg',
-    alt: 'Atletas da Escolinha River levantando a taça',
-    posicao: 'center 40%',
-    cor: 'destaque',
-  },
-  {
-    id: 'book-dia-gestante',
-    categoria: 'Book Solidário',
-    titulo: 'Ensaios do Dia da Gestante com figurino, maquiagem e kit de enxoval',
-    foto_url: '/fotos/galeria-book-ponte.jpg',
-    alt: 'Gestante no ensaio do Book Solidário',
-    posicao: 'center 25%',
-    data: '15 de agosto',
-    cor: 'sol',
-  },
-  {
-    id: 'festa-criancas',
-    categoria: 'Ação social',
-    titulo: 'Festa das crianças reúne personagens, lanche e bolo no Ponta Kayana',
-    foto_url: '/fotos/galeria-acoes-homem-aranha.jpg',
-    alt: 'Homem-Aranha com crianças na ação social',
-    posicao: 'center 30%',
-    cor: 'marca',
-  },
-];
+// Vazio até chegarem as primeiras notícias com foto (a seção some do site enquanto estiver vazia).
+// Exemplo:
+// { id: 'entrega-cestas', categoria: 'Cestas', titulo: 'Entrega de cestas no Setor Solange',
+//   foto_url: '/fotos/entrega-cestas.jpg', alt: 'Voluntários entregando cestas', cor: 'destaque' },
+export const DESTAQUES: Destaque[] = [];

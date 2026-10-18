@@ -38,8 +38,11 @@ export const GaleriaLightbox: React.FC<GaleriaLightboxProps> = ({ photos, projec
     return () => window.removeEventListener('keydown', onKey);
   }, [selectedIndex, go]);
 
+  // Sem fotos ainda: a seção não aparece (as fotos são enviadas pelo painel, aba Galeria).
+  if (sorted.length === 0) return null;
+
   return (
-    <section id="galeria" className="container-site flex flex-col gap-8 pb-20 sm:pb-28">
+    <section id="galeria" className="container-site flex flex-col gap-8 py-14 sm:py-24">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div className="flex flex-col gap-3.5">
           <span className="kicker">Galeria</span>
@@ -50,7 +53,7 @@ export const GaleriaLightbox: React.FC<GaleriaLightboxProps> = ({ photos, projec
         </a>
       </div>
 
-      {visibleCategories.length > 2 && (
+      {visibleCategories.length > 1 && (
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0" role="tablist" aria-label="Filtrar fotos">
           {visibleCategories.map((cat) => {
             const active = activeCategory === cat.id;

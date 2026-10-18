@@ -176,7 +176,7 @@ apiRouter.post('/auth/request-password-reset', async (req: Request, res: Respons
     defer(req, sendSystemEmail({
       tipo: 'RECUPERACAO_SENHA',
       destinatario: user.email,
-      assunto: 'Código para redefinir sua senha - Associação Novo Amanhecer',
+      assunto: 'Código para redefinir sua senha - Instituto Trindade Solidária',
       corpo: `Olá, ${user.nome}. Foi solicitada a redefinição da sua senha. Seu código de redefinição é: ${token}. Ele expira em 1 hora. Se você não pediu, ignore este e-mail.`,
       corpoLog: 'Código de redefinição enviado (oculto no histórico).',
     }), 'Erro ao enviar código de redefinição');

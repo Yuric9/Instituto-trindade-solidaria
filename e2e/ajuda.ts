@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 
-export const ADMIN_EMAIL = 'coordenacao@novoamanhecer.org.br';
+export const ADMIN_EMAIL = 'coordenacao@institutotrindadesolidaria.org.br';
 export const ADMIN_SENHA = 'Senha-E2E-123'; // a mesma de e2e/servidor.mjs
 
 /** CPF válido e diferente a cada chamada (o cadastro recusa CPF repetido). */

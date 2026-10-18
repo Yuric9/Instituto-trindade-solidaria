@@ -7,7 +7,7 @@ import { useJanelaModal } from '../../utils/useJanelaModal';
 
 interface GaleriaCrudProps {
   photos: GalleryPhoto[];
-  /** Projetos da associação: cada um vira uma categoria de foto */
+  /** Projetos do instituto: cada um vira uma categoria de foto */
   projects?: ProjectCard[];
   onUpdatePhotos: (photos: GalleryPhoto[]) => void;
 }
@@ -70,7 +70,7 @@ export const GaleriaCrud: React.FC<GaleriaCrudProps> = ({ photos, projects, onUp
         <div>
           <h2 className="text-lg font-bold text-ink">Gerenciador da Galeria de Fotos</h2>
           <p className="text-xs text-muted">
-            Adicione registros das aulas de ballet, futebol, ensaios de gestantes e festas comunitárias.
+            Adicione registros dos treinos, entregas de cestas, reformas e ações comunitárias.
           </p>
         </div>
 
@@ -173,7 +173,7 @@ export const GaleriaCrud: React.FC<GaleriaCrudProps> = ({ photos, projects, onUp
                   id="galeria-legenda-descritiva"
                   rows={2}
                   required
-                  placeholder="Ex: Alunas de ballet ensaiando com as sapatilhas novas na sede de Trindade."
+                  placeholder="Ex: Entrega de cestas básicas no Setor Solange."
                   value={newLegenda}
                   onChange={(e) => setNewLegenda(e.target.value)}
                   className="w-full px-3 py-2 text-xs sm:text-sm bg-paper border border-line rounded-xl"

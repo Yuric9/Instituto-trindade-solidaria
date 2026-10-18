@@ -18,7 +18,7 @@ describe('login', () => {
   it('guarda a sessão num cookie HttpOnly e SameSite=Lax', async () => {
     const { res } = await login();
     const setCookie = res.headers.get('set-cookie') ?? '';
-    expect(setCookie).toMatch(/^ana_token=/);
+    expect(setCookie).toMatch(/^its_token=/);
     expect(setCookie).toContain('HttpOnly');
     expect(setCookie).toContain('SameSite=Lax');
     expect(setCookie).toContain('Secure'); // a requisição de teste é https
@@ -66,7 +66,7 @@ describe('sessão', () => {
 
   it('não aceita o token pelo cabeçalho Authorization: Bearer', async () => {
     const { cookie } = await login();
-    const token = cookie.replace('ana_token=', '');
+    const token = cookie.replace('its_token=', '');
     const res = await api('/auth/me', { headers: { authorization: `Bearer ${token}` } });
     expect(res.status).toBe(401);
   });
@@ -83,7 +83,7 @@ describe('sessão', () => {
 
     const logout = await api('/auth/logout', { method: 'POST', cookie });
     expect(logout.status).toBe(200);
-    expect(logout.headers.get('set-cookie')).toMatch(/ana_token=;.*Max-Age=0/);
+    expect(logout.headers.get('set-cookie')).toMatch(/its_token=;.*Max-Age=0/);
 
     expect((await api('/auth/me', { cookie: copied })).status).toBe(401);
   });

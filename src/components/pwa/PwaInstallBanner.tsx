@@ -11,7 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { usePwa } from '../../pwa/usePwa';
-import { NovoAmanhecerLogo } from '../brand/NovoAmanhecerLogo';
+import { Simbolo } from '../brand/Logo';
 import { useJanelaModal } from '../../utils/useJanelaModal';
 
 export const PwaInstallBanner: React.FC = () => {
@@ -31,7 +31,7 @@ export const PwaInstallBanner: React.FC = () => {
   const [installSuccess, setInstallSuccess] = useState(false);
 
   useEffect(() => {
-    const isDismissed = sessionStorage.getItem('ana_pwa_banner_dismissed');
+    const isDismissed = sessionStorage.getItem('its_pwa_banner_dismissed');
     if (isDismissed === 'true') {
       setDismissed(true);
     }
@@ -39,7 +39,7 @@ export const PwaInstallBanner: React.FC = () => {
 
   const handleDismiss = () => {
     setDismissed(true);
-    sessionStorage.setItem('ana_pwa_banner_dismissed', 'true');
+    sessionStorage.setItem('its_pwa_banner_dismissed', 'true');
   };
 
   const handleInstallClick = async () => {
@@ -76,7 +76,7 @@ export const PwaInstallBanner: React.FC = () => {
             </div>
             <div>
               <p className="text-xs font-bold text-slate-100">Nova versão disponível!</p>
-              <p className="text-[11px] text-slate-500">Atualize para ver as últimas novidades da Associação.</p>
+              <p className="text-[11px] text-slate-500">Atualize para ver as últimas novidades do Instituto.</p>
             </div>
           </div>
           <button
@@ -98,7 +98,7 @@ export const PwaInstallBanner: React.FC = () => {
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-lg p-1 bg-brand shrink-0 flex items-center justify-center">
-                <NovoAmanhecerLogo size="sm" showText={false} />
+                <Simbolo className="h-8" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -207,7 +207,7 @@ export const PwaInstallBanner: React.FC = () => {
                     <PlusSquare className="w-4 h-4 text-brand inline" />
                   </p>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    O ícone oficial da Associação Novo Amanhecer será preparado.
+                    O ícone oficial do Instituto Trindade Solidária será preparado.
                   </p>
                 </div>
               </div>

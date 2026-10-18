@@ -1,17 +1,26 @@
 {
-  "name": "Associação Novo Amanhecer",
-  "short_name": "Novo Amanhecer",
-  "description": "Portal comunitário da Associação Novo Amanhecer em Trindade/GO. Ballet solidário, escolinha de futebol, book para gestantes e acolhimento comunitário.",
+  "name": "Instituto Trindade Solidária",
+  "short_name": "Trindade Solidária",
+  "description": "Instituto Trindade Solidária (Trindade/GO): iniciação esportiva, cestas básicas, apoio à moradia e cidadania. Amor e compaixão ao próximo.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "window-controls-overlay", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "window-controls-overlay",
+    "minimal-ui"
+  ],
   "orientation": "portrait-primary",
-  "background_color": "#0F172A",
-  "theme_color": "#B45309",
+  "background_color": "#01303C",
+  "theme_color": "#01303C",
   "lang": "pt-BR",
   "dir": "ltr",
-  "categories": ["social", "education", "sports", "community", "lifestyle"],
+  "categories": [
+    "social",
+    "sports",
+    "education",
+    "community"
+  ],
   "icons": [
     {
       "src": "/pwa-192x192.png",
@@ -40,32 +49,40 @@
   ],
   "shortcuts": [
     {
-      "name": "Fazer Cadastro",
-      "short_name": "Cadastro",
-      "description": "Inscreva-se nos projetos sociais da Associação",
+      "name": "Fazer inscrição",
+      "short_name": "Inscrição",
+      "description": "Inscreva-se nas atividades do Instituto",
       "url": "/#cadastro",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/pwa-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
-      "name": "Projetos Sociais",
-      "short_name": "Projetos",
-      "description": "Conheça o ballet, futebol e book de gestantes",
+      "name": "Nossas ações",
+      "short_name": "Ações",
+      "description": "Iniciação esportiva, cestas básicas, moradia e cidadania",
       "url": "/#projetos",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/pwa-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
-      "name": "Feed do Instagram",
-      "short_name": "Instagram",
-      "description": "Veja as fotos e stories recentes da Associação",
-      "url": "/#instagram",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Como Ajudar (PIX)",
+      "name": "Como ajudar (PIX)",
       "short_name": "Doar PIX",
-      "description": "Apoie os projetos comunitários com chave PIX",
+      "description": "Apoie o Instituto pela chave PIX (CNPJ)",
       "url": "/#como-ajudar",
-      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/pwa-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "prefer_related_applications": false

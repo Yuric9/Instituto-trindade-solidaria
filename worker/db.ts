@@ -49,7 +49,7 @@ async function initDatabase() {
 
   // 2. Conta administrativa inicial — só quando não existe nenhum usuário.
   if ((await count('SELECT COUNT(*) as count FROM users')) === 0) {
-    const adminEmail = (cfg('ADMIN_EMAIL') || 'coordenacao@novoamanhecer.org.br').toLowerCase();
+    const adminEmail = (cfg('ADMIN_EMAIL') || 'coordenacao@institutotrindadesolidaria.org.br').toLowerCase();
     const initialPassword = cfg('ADMIN_INITIAL_PASSWORD');
     if (initialPassword.length >= 12) {
       const adminId = 'usr-coordenacao-admin';
@@ -117,10 +117,10 @@ async function initDatabase() {
   if ((await count('SELECT COUNT(*) as count FROM donations')) === 0) {
     const day = 1000 * 60 * 60 * 24;
     const demo = [
-      ['don-01', 'Maria Aparecida Santos', 'maria.santos@gmail.com', '(62) 99812-4411', 100, 'Com muito carinho para ajudar no figurino do ballet infantil.', 3],
-      ['don-02', 'João Pereira Trindade', 'joao.pereira@hotmail.com', '(62) 98733-1029', 50, 'Para compra de bolas e redes da escolinha de futebol comunitário.', 7],
-      ['don-03', 'Drogaria & Manipulação Trindade', 'contato@drogariatrindade.com.br', '(62) 99422-5500', 250, 'Doação institucional para a Páscoa Solidária das crianças.', 12],
-      ['don-04', 'Ana Carolina Bastos', 'anacarol.bastos@gmail.com', '(62) 99105-3388', 40, 'Apoio aos kits de enxoval para as gestantes acolhidas.', 18],
+      ['don-01', 'Maria Aparecida Santos', 'maria.santos@gmail.com', '(62) 99812-4411', 100, 'Com muito carinho para as cestas básicas do mês.', 3],
+      ['don-02', 'João Pereira Trindade', 'joao.pereira@hotmail.com', '(62) 98733-1029', 50, 'Para compra de bolas e coletes da iniciação esportiva.', 7],
+      ['don-03', 'Drogaria & Manipulação Trindade', 'contato@drogariatrindade.com.br', '(62) 99422-5500', 250, 'Doação institucional para a reforma de moradias.', 12],
+      ['don-04', 'Ana Carolina Bastos', 'anacarol.bastos@gmail.com', '(62) 99105-3388', 40, 'Apoio ao reforço escolar das crianças.', 18],
       ['don-05', 'Carlos Eduardo Rezende', 'carlos.rezende@outlook.com', '(62) 98411-9922', 150, 'Contribuição mensal voluntária para a sede comunitária.', 25],
     ] as const;
     const stmt = db.prepare(`

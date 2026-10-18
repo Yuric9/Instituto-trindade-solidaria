@@ -25,7 +25,7 @@ test('projeto novo aparece na galeria, no site e nas inscrições', async ({ pag
   await abrirAba(page, /^Galeria/);
   await page.getByRole('button', { name: 'Adicionar Foto' }).click();
   const formFoto = page.getByRole('dialog', { name: /Adicionar Nova Foto/ });
-  await formFoto.getByLabel('Link da foto').fill('/fotos/galeria-ballet-turma.jpg');
+  await formFoto.getByLabel('Link da foto').fill('/fotos/area-esporte.svg');
   await formFoto.getByLabel(/Legenda/).fill(`Primeira turma de ${projeto}`);
   await formFoto.getByLabel('Categoria').selectOption({ label: projeto });
   await formFoto.getByRole('button', { name: 'Adicionar Foto' }).click();
@@ -37,7 +37,7 @@ test('projeto novo aparece na galeria, no site e nas inscrições', async ({ pag
   await page.getByRole('tab', { name: projeto }).click();
   await expect(page.getByRole('button', { name: new RegExp(`Primeira turma de ${projeto}`) }).or(page.getByAltText(`Primeira turma de ${projeto}`)).first()).toBeVisible();
   await page.goto('/#cadastro');
-  await expect(page.getByLabel(/Projeto Social Desejado/).locator('option', { hasText: projeto })).toHaveCount(1);
+  await expect(page.getByLabel(/Em qual ação/).locator('option', { hasText: projeto })).toHaveCount(1);
 
   // 4. Uma inscrição nesse projeto: editar e salvar não troca o projeto
   const nome = nomeUnico('Aluna Nova');

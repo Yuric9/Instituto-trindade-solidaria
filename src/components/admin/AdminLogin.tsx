@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Shield, Lock, Mail, ArrowLeft, KeyRound, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { NovoAmanhecerLogo } from '../brand/NovoAmanhecerLogo';
+import { Logo } from '../brand/Logo';
 import { api } from '../../services/api';
 import { AuthUser } from '../../types';
 
@@ -79,17 +79,16 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onBackTo
 
   return (
     <div className="flex min-h-screen bg-paper">
-      <aside className="relative hidden w-[46%] max-w-[640px] overflow-hidden bg-brand-dark lg:block">
-        <img src="/fotos/hero-futebol-comemoracao.jpg" alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover object-[center_40%]" />
-        <div className="bg-help absolute inset-0" />
+      <aside className="bg-pontos relative hidden w-[46%] max-w-[640px] overflow-hidden lg:block">
+        <div className="faixas-marca absolute -bottom-10 -right-24 h-72 w-[130%] opacity-90" aria-hidden="true" />
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
-          <NovoAmanhecerLogo size="md" inverted />
+          <Logo fundo="escuro" className="h-14" />
           <div className="flex flex-col gap-4">
-            <span className="self-start rounded bg-sun px-3 py-1.5 text-[13px] font-extrabold text-ink">Área da equipe</span>
-            <p className="text-[40px] font-extrabold leading-[1.1] tracking-[-0.03em]">Inscrições, projetos e conteúdo do site em um só lugar.</p>
-            <p className="max-w-md text-base leading-relaxed text-brand-light">Acesso restrito à coordenação e aos voluntários da Associação Novo Amanhecer.</p>
+            <span className="self-start rounded bg-lima px-3 py-1.5 text-[13px] font-extrabold uppercase text-brand-dark">Área da equipe</span>
+            <p className="text-[38px] font-black uppercase leading-[1.05] tracking-[-0.02em]">Inscrições, ações e conteúdo do site em um só lugar.</p>
+            <p className="max-w-md text-base leading-relaxed text-brand-light">Acesso restrito à coordenação e aos voluntários do Instituto Trindade Solidária.</p>
           </div>
-          <span className="text-[13px] text-brand-muted">Setor Ponta Kayana · Trindade — GO</span>
+          <span className="text-[13px] text-brand-muted">Setor Solange · Trindade — GO</span>
         </div>
       </aside>
 
@@ -101,7 +100,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onBackTo
         <div className="flex flex-1 items-center justify-center py-8">
           <div className="card w-full max-w-md p-7 sm:p-9">
             <div className="mb-7 flex flex-col gap-2">
-              <div className="mb-2 lg:hidden"><NovoAmanhecerLogo size="md" /></div>
+              <div className="mb-2 lg:hidden"><Logo className="h-14" /></div>
               <span className="kicker">{isResetMode ? 'Recuperar acesso' : 'Painel de gestão'}</span>
               <h1 className="text-[26px] font-extrabold leading-tight tracking-[-0.02em] text-brand-dark">
                 {isResetMode ? 'Vamos criar uma nova senha' : 'Entrar no painel'}
@@ -180,7 +179,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onBackTo
             <div className="mt-7 flex flex-col gap-2.5 border-t border-line pt-5">
               <div className="flex items-center gap-1.5 text-[13px] text-muted"><Shield className="h-3.5 w-3.5 text-brand" /><span>Cada pessoa vê só o que o seu papel permite:</span></div>
               <div className="flex flex-wrap gap-2">
-                <span className="chip bg-sun-soft text-sun-ink">Admin geral</span>
+                <span className="chip bg-lima-soft text-lima-ink">Admin geral</span>
                 <span className="chip bg-brand-soft text-brand-ink">Coordenação</span>
                 <span className="chip bg-sand text-body">Voluntário</span>
               </div>

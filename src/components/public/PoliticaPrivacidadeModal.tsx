@@ -43,7 +43,7 @@ export const PoliticaPrivacidadeModal: React.FC<PoliticaPrivacidadeModalProps> =
           <div className="p-4 bg-sand border border-line rounded-lg flex items-start gap-3 text-brand">
             <Lock className="w-5 h-5 text-brand shrink-0 mt-0.5" />
             <div className="text-xs leading-relaxed">
-              <strong>Compromisso de Sigilo e Segurança:</strong> A Associação Novo Amanhecer (CNPJ: 35.157.094/0001-91) trata os dados cadastrais de famílias, crianças e voluntários com respeito absoluto, confidencialidade e segurança, nunca comercializando ou compartilhando dados com terceiros não autorizados.
+              <strong>Compromisso de Sigilo e Segurança:</strong> O Instituto Trindade Solidária (CNPJ: 45.698.518/0001-89) trata os dados cadastrais de famílias, crianças e voluntários com respeito absoluto, confidencialidade e segurança, nunca comercializando ou compartilhando dados com terceiros não autorizados.
             </div>
           </div>
 
@@ -53,13 +53,13 @@ export const PoliticaPrivacidadeModal: React.FC<PoliticaPrivacidadeModalProps> =
               1. Quais dados coletamos e por quê?
             </h4>
             <p className="text-xs">
-              Para viabilizar o acolhimento nos projetos sociais (Ballet Solidário, Escolinha de Futebol, Book de Gestantes e Ações Comunitárias), coletamos:
+              Para viabilizar o atendimento nas ações do Instituto (Iniciação Esportiva, Cestas Básicas, Moradia Digna e Educação e Cidadania), coletamos:
             </p>
             <ul className="text-xs list-disc list-inside space-y-1 pl-2 text-slate-700">
               <li><strong>Nome Completo e Data de Nascimento:</strong> Para adequação às faixas etárias de turmas e atividades esportivas/culturais.</li>
               <li><strong>CPF (Cadastro de Pessoa Física):</strong> Para identificação unívoca do beneficiário ou responsável legal, evitando duplicidade e assegurando a prestação de contas transparente.</li>
               <li><strong>Telefone/WhatsApp:</strong> Para avisos de horários, convocações, eventos comunitários e confirmação de presença.</li>
-              <li><strong>Endereço Residencial:</strong> Para comprovação de vínculo com a comunidade de Trindade/GO (Setor Ponta Kayana e adjacências).</li>
+              <li><strong>Endereço Residencial:</strong> Para comprovação de vínculo com a comunidade de Trindade/GO (Setor Solange, Nova Canaã, Residencial Santa Fé, Jardins e adjacências).</li>
             </ul>
           </section>
 
@@ -95,7 +95,7 @@ export const PoliticaPrivacidadeModal: React.FC<PoliticaPrivacidadeModalProps> =
               4. Contato com a Coordenação de Privacidade
             </h4>
             <p className="text-xs">
-              Para tirar dúvidas ou exercer seus direitos de privacidade, entre em contato pelo e-mail <strong>contato@novoamanhecertrindade.org.br</strong> ou pelo WhatsApp oficial <strong>(62) 99341-8820</strong>.
+              Para tirar dúvidas ou exercer seus direitos de privacidade, entre em contato pelo WhatsApp oficial <strong>(62) 99880-8600</strong> ou pelo Instagram <strong>@institutotrindadesolidaria</strong>.
             </p>
           </section>
         </div>

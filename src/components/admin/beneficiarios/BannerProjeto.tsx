@@ -6,9 +6,10 @@ import { isProjectMatch, type Filtros } from './filtros';
 import type { ProjetoPreset } from './presets';
 
 const COR_DO_ATALHO: Record<string, string> = {
-  futebol: 'bg-emerald-700',
-  ballet: 'bg-rose-600',
-  book: 'bg-purple-600',
+  esporte: 'bg-lime-700',
+  cestas: 'bg-sky-700',
+  moradia: 'bg-orange-700',
+  cidadania: 'bg-violet-700',
 };
 
 const STATUS_DA_TURMA: (BeneficiaryStatus | 'todos')[] = [

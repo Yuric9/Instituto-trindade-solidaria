@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "novo-amanhecer",
+  "name": "trindade-solidaria",
   "main": "worker/index.ts",
   "compatibility_date": "2026-09-01",
 
@@ -13,12 +13,14 @@
     "run_worker_first": ["/api/*"]
   },
 
-  // Banco D1 (já criado na conta da Cloudflare).
+  // Banco D1. ANTES DO PRIMEIRO DEPLOY: crie o banco com
+  //   npx wrangler d1 create trindade-solidaria-db
+  // e cole aqui o "database_id" que o comando mostrar (o valor abaixo é só um marcador).
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "novo-amanhecer-db",
-      "database_id": "e256256a-b66e-48df-85b4-80f4487fbf2d",
+      "database_name": "trindade-solidaria-db",
+      "database_id": "00000000-0000-0000-0000-000000000000",
       "migrations_dir": "migrations"
     }
   ],
@@ -27,7 +29,7 @@
   "r2_buckets": [
     {
       "binding": "FOTOS",
-      "bucket_name": "novo-amanhecer-fotos"
+      "bucket_name": "trindade-solidaria-fotos"
     }
   ],
 
@@ -43,7 +45,7 @@
   // Variáveis públicas. Segredos (JWT_SECRET, ADMIN_INITIAL_PASSWORD, RESEND_API_KEY)
   // ficam em Settings → Variables and Secrets no painel, NUNCA aqui.
   "vars": {
-    "ADMIN_EMAIL": "coordenacao@novoamanhecer.org.br",
+    "ADMIN_EMAIL": "coordenacao@institutotrindadesolidaria.org.br",
     "EMAIL_FROM": "",
     "SEED_DEMO_DATA": "false",
     "DEV_MODE": "false"
@@ -54,7 +56,7 @@
   // EMAIL_FROM vazio = prévias não enviam e-mails de verdade.
   "previews": {
     "vars": {
-      "ADMIN_EMAIL": "coordenacao@novoamanhecer.org.br",
+      "ADMIN_EMAIL": "coordenacao@institutotrindadesolidaria.org.br",
       "EMAIL_FROM": "",
       "SEED_DEMO_DATA": "true",
       "DEV_MODE": "false"
@@ -62,13 +64,13 @@
     "d1_databases": [
       {
         "binding": "DB",
-        "database_id": "c10e78ab-eedf-4b78-a51b-4fbcc9b777bb"
+        "database_id": "00000000-0000-0000-0000-000000000001"
       }
     ],
     "r2_buckets": [
       {
         "binding": "FOTOS",
-        "bucket_name": "novo-amanhecer-fotos-preview"
+        "bucket_name": "trindade-solidaria-fotos-preview"
       }
     ]
   }

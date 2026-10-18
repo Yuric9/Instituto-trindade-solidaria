@@ -25,7 +25,7 @@ export async function resolvePrimaryRole(userId: string, roles: string[]): Promi
 }
 
 /** Nome do cookie HttpOnly da sessão (o JavaScript do navegador não consegue lê-lo). */
-export const SESSION_COOKIE = 'ana_token';
+export const SESSION_COOKIE = 'its_token';
 
 /** Duração da sessão: 24 horas. */
 export const SESSION_TTL_SECONDS = 24 * 60 * 60;
@@ -60,7 +60,7 @@ async function loadUser(token: string): Promise<LoadResult> {
   const user = await db.prepare('SELECT id, nome, email, ativo FROM users WHERE id = ?')
     .get<{ id: string; nome: string; email: string; ativo: number }>(decoded.id);
   if (!user || user.ativo !== 1) {
-    return { ok: false, status: 403, error: 'Conta inativa ou não localizada. Contate a coordenação da associação.' };
+    return { ok: false, status: 403, error: 'Conta inativa ou não localizada. Contate a coordenação do instituto.' };
   }
 
   const roles = await getUserRoles(user.id);

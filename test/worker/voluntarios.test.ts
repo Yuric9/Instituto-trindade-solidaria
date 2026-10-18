@@ -6,7 +6,7 @@ const formVoluntario = (over: Record<string, unknown> = {}) => ({
   nome: 'Voluntária de Teste',
   telefone: '(62) 98888-7777',
   email: 'voluntaria@exemplo.com',
-  area: 'Oficina de Ballet',
+  area: 'Oficinas e Cidadania',
   disponibilidade: 'Sábados (Manhã)',
   habilidades: 'Dança',
   observacoes: '',
@@ -64,12 +64,12 @@ describe('edição de voluntário (PATCH /volunteers/:id)', () => {
     const res = await api(`/volunteers/${id}`, {
       method: 'PATCH',
       cookie,
-      body: { nome: 'Nome Novo', area: 'Treinos de Futebol', disponibilidade: 'Escala Flexível' },
+      body: { nome: 'Nome Novo', area: 'Treinos Esportivos', disponibilidade: 'Escala Flexível' },
     });
     expect(res.status).toBe(200);
     expect(await doBanco(id)).toMatchObject({
       nome: 'Nome Novo',
-      area: 'Treinos de Futebol',
+      area: 'Treinos Esportivos',
       disponibilidade: 'Escala Flexível',
       habilidades: 'Manter',
       telefone: '(62) 98888-7777',

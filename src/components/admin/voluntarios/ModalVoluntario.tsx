@@ -35,7 +35,7 @@ export const ModalVoluntario: React.FC<ModalVoluntarioProps> = ({ editando, form
               {editando ? 'Editar Voluntário' : 'Novo Voluntário da Equipe'}
             </h2>
             <span className="text-xs text-muted">
-              Associação Novo Amanhecer · Trindade - GO
+              Instituto Trindade Solidária · Trindade - GO
             </span>
           </div>
         </div>
