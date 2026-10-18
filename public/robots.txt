@@ -7,4 +7,4 @@ Disallow: /login
 Disallow: /api/
 Allow: /api/fotos/
 
-Sitemap: https://anovoamanhecer.org/sitemap.xml
+Sitemap: https://institutotrindadesolidaria.org.br/sitemap.xml

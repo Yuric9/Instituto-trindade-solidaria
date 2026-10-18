@@ -4,6 +4,49 @@ import { db, logAudit } from '../db';
 import { authenticateToken, requireRole, requireAdmin, getOptionalUser } from '../auth';
 import { validateCPF, validatePhone, validateEmail, sanitizeString, checkHoneypot, checkRateLimit } from '../validation';
 import { apiRouter } from './router';
+import {
+  CATEGORIAS,
+  SEXOS,
+  VERSAO_TERMOS,
+  ehIniciacaoEsportiva,
+  ehMenorDeIdade,
+  mascararFicha,
+  validarFicha,
+  type FichaEsportiva,
+} from '../../src/utils/ficha';
+
+/** Lê a coluna ficha_json (texto) e devolve o objeto, ou undefined se vazia/corrompida. */
+function lerFicha(json: string | null | undefined): FichaEsportiva | undefined {
+  if (!json) return undefined;
+  try {
+    return JSON.parse(json) as FichaEsportiva;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Monta a ficha a gravar só com os campos conhecidos, limpos e com tamanho limitado. */
+function limparFicha(bruta: any, nascimento: string): FichaEsportiva {
+  const texto = (v: unknown, max: number) => sanitizeString(typeof v === 'string' ? v : '', max);
+  const ficha: FichaEsportiva = {
+    rg: texto(bruta?.rg, 20),
+    sexo: SEXOS.find((x) => x === bruta?.sexo) ?? '',
+    categoria: CATEGORIAS.find((x) => x === bruta?.categoria) ?? '',
+    termos_aceitos: bruta?.termos_aceitos === true,
+    termos_versao: VERSAO_TERMOS,
+  };
+  if (ehMenorDeIdade(nascimento) && bruta?.responsavel) {
+    const r = bruta.responsavel;
+    ficha.responsavel = {
+      nome: texto(r.nome, 120),
+      rg: texto(r.rg, 20),
+      cpf: texto(r.cpf, 20),
+      telefone: texto(r.telefone, 30),
+      endereco: texto(r.endereco, 200),
+    };
+  }
+  return ficha;
+}
 
 // =========================================================================
 // 2. BENEFICIÁRIOS (RLS: APENAS ADMINS/COORDENAÇÃO LOGADOS, LGPD, VALIDAÇÃO)
@@ -14,11 +57,12 @@ import { apiRouter } from './router';
  * Qualquer requisição anônima recebe 401 Unauthorized.
  */
 apiRouter.get('/beneficiaries', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-  const rows = await db.prepare(`
-    SELECT id, nome, cpf, nascimento, telefone, email, endereco, projeto, status, observacoes, motivo_status, consentimento_lgpd, criado_em, atualizado_em
+  const rawRows = await db.prepare(`
+    SELECT id, nome, cpf, nascimento, telefone, email, endereco, projeto, status, observacoes, motivo_status, ficha_json, consentimento_lgpd, criado_em, atualizado_em
     FROM beneficiaries
     ORDER BY criado_em DESC
   `).all() as any[];
+  const rows = rawRows.map(({ ficha_json, ...b }) => ({ ...b, ficha: lerFicha(ficha_json) }));
 
   // Regra de Sigilo LGPD:
   // Voluntários operacionais recebem CPF e Endereço mascarados
@@ -28,6 +72,7 @@ apiRouter.get('/beneficiaries', authenticateToken, async (req: AuthenticatedRequ
       cpf: b.cpf ? `***.***.${b.cpf.replace(/\D/g, '').slice(6, 9) || '000'}-**` : 'Protegido (LGPD)',
       endereco: 'Sigilo de Residência (Visível apenas para Coordenação/Admin)',
       telefone: b.telefone ? b.telefone.slice(0, 5) + '****-****' : '',
+      ficha: b.ficha && mascararFicha(b.ficha),
     }));
     return res.json(masked);
   }
@@ -67,12 +112,13 @@ apiRouter.post('/beneficiaries', async (req: Request, res: Response) => {
     status,
     observacoes,
     consentimento_lgpd,
+    ficha: fichaRecebida,
   } = req.body;
 
   // 3. Validação de Consentimento LGPD Obrigatório
   if (!consentimento_lgpd) {
     return res.status(400).json({
-      error: 'É obrigatório aceitar o termo de consentimento da LGPD para registrar a inscrição na associação.',
+      error: 'É obrigatório aceitar o termo de consentimento da LGPD para registrar a inscrição no instituto.',
     });
   }
 
@@ -97,6 +143,18 @@ apiRouter.post('/beneficiaries', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'O formato do e-mail informado é inválido.' });
   }
 
+  // Iniciação esportiva: a ficha (categoria, responsável do menor e aceite dos termos) é obrigatória.
+  // Mesmas regras do formulário do site (src/utils/ficha.ts).
+  let fichaJson: string | null = null;
+  if (ehIniciacaoEsportiva(projeto || '')) {
+    const ficha = limparFicha(fichaRecebida, nascimento || '');
+    const erroFicha = validarFicha(ficha, nascimento || '');
+    if (erroFicha && !isStaff) {
+      return res.status(400).json({ error: erroFicha });
+    }
+    fichaJson = JSON.stringify(ficha);
+  }
+
   // 5. Verificar duplicidade de CPF no banco de dados
   const cleanCpf = cpf.replace(/\D/g, '');
   const existingBen = await db.prepare(`SELECT id, nome FROM beneficiaries WHERE REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '') = ?`)
@@ -117,8 +175,8 @@ apiRouter.post('/beneficiaries', async (req: Request, res: Response) => {
 
   await db.prepare(`
     INSERT INTO beneficiaries (
-      id, nome, cpf, nascimento, telefone, email, endereco, projeto, status, observacoes, consentimento_lgpd, ip_origem, criado_em, atualizado_em
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
+      id, nome, cpf, nascimento, telefone, email, endereco, projeto, status, observacoes, ficha_json, consentimento_lgpd, ip_origem, criado_em, atualizado_em
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
   `).run(
     id,
     sanitizeString(nome, 120),
@@ -127,9 +185,10 @@ apiRouter.post('/beneficiaries', async (req: Request, res: Response) => {
     sanitizeString(telefone, 30),
     sanitizeString(email || '', 100),
     sanitizeString(endereco || 'Trindade - GO', 200),
-    sanitizeString(projeto || 'Aulas de Ballet Solidário', 100),
+    sanitizeString(projeto || 'Centro de Iniciação Esportiva', 100),
     sanitizeString(finalStatus, 30),
     sanitizeString(observacoes || '', 500),
+    fichaJson,
     clientIp,
     now,
     now

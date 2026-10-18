@@ -19,7 +19,7 @@ function vol(over: Partial<Volunteer>): Volunteer {
     nome: 'Fulano',
     telefone: '(62) 90000-0000',
     email: '',
-    area: 'Oficina de Ballet',
+    area: 'Oficinas e Cidadania',
     disponibilidade: 'Sábados (Manhã)',
     ativo: true,
     data_inicio: '2026-01-01',
@@ -28,18 +28,18 @@ function vol(over: Partial<Volunteer>): Volunteer {
 }
 
 const EQUIPE = [
-  vol({ id: '1', nome: 'Bruno', area: 'Treinos de Futebol', disponibilidade: 'Finais de Semana (Geral)', habilidades: 'Futsal infantil' }),
-  vol({ id: '2', nome: 'Larissa', area: 'Fotografia & Produção (Book)', disponibilidade: 'Finais de Semana (Geral)' }),
-  vol({ id: '3', nome: 'Cleusa', area: 'Cozinha Comunitária & Alimentação', disponibilidade: 'Sábados (Manhã)', telefone: '(62) 99233-8877' }),
-  vol({ id: '4', nome: 'Rodrigo', area: 'Treinos de Futebol', disponibilidade: 'Escala Flexível', ativo: false }),
+  vol({ id: '1', nome: 'Bruno', area: 'Treinos Esportivos', disponibilidade: 'Finais de Semana (Geral)', habilidades: 'Futsal infantil' }),
+  vol({ id: '2', nome: 'Larissa', area: 'Reformas e Construção', disponibilidade: 'Finais de Semana (Geral)' }),
+  vol({ id: '3', nome: 'Cleusa', area: 'Arrecadação e Entrega de Cestas', disponibilidade: 'Sábados (Manhã)', telefone: '(62) 99233-8877' }),
+  vol({ id: '4', nome: 'Rodrigo', area: 'Treinos Esportivos', disponibilidade: 'Escala Flexível', ativo: false }),
 ];
 
 describe('agruparVoluntarios', () => {
   it('agrupa por área, do maior grupo para o menor, com porcentagem e cor', () => {
     expect(agruparVoluntarios(EQUIPE, 'area')).toEqual([
-      { name: 'Treinos de Futebol', value: 2, percentage: 50, color: '#059669' },
-      { name: 'Fotografia & Produção (Book)', value: 1, percentage: 25, color: '#8b5cf6' },
-      { name: 'Cozinha Comunitária & Alimentação', value: 1, percentage: 25, color: '#f97316' },
+      { name: 'Treinos Esportivos', value: 2, percentage: 50, color: '#93c01f' },
+      { name: 'Reformas e Construção', value: 1, percentage: 25, color: '#f97316' },
+      { name: 'Arrecadação e Entrega de Cestas', value: 1, percentage: 25, color: '#00a6e6' },
     ]);
   });
 
@@ -64,14 +64,14 @@ describe('filtrarVoluntarios', () => {
 
   it('busca por nome, área, horário, telefone ou habilidade, sem diferenciar maiúsculas', () => {
     expect(ids('BRUNO')).toEqual(['1']);
-    expect(ids('futebol')).toEqual(['1', '4']);
+    expect(ids('esportivos')).toEqual(['1', '4']);
     expect(ids('sábados')).toEqual(['3']);
     expect(ids('99233')).toEqual(['3']);
     expect(ids('futsal')).toEqual(['1']);
   });
 
   it('filtro clicado no gráfico depende do modo', () => {
-    expect(ids('', 'Treinos de Futebol', 'area')).toEqual(['1', '4']);
+    expect(ids('', 'Treinos Esportivos', 'area')).toEqual(['1', '4']);
     expect(ids('', 'Finais de Semana (Geral)', 'disponibilidade')).toEqual(['1', '2']);
     expect(ids('bruno', 'Finais de Semana (Geral)', 'disponibilidade')).toEqual(['1']);
   });
@@ -79,10 +79,10 @@ describe('filtrarVoluntarios', () => {
 
 describe('WhatsApp e CSV', () => {
   it('monta o link do WhatsApp com DDI 55, só dígitos e mensagem codificada', () => {
-    const link = linkWhatsapp({ nome: 'Ana', telefone: '(62) 99124-5533', area: 'Oficina de Ballet' });
+    const link = linkWhatsapp({ nome: 'Ana', telefone: '(62) 99124-5533', area: 'Treinos Esportivos' });
     expect(link.startsWith('https://wa.me/5562991245533?text=')).toBe(true);
     expect(decodeURIComponent(link.split('text=')[1])).toBe(
-      'Olá Ana! Aqui é da coordenação da Associação Novo Amanhecer (Trindade). Gostaria de falar sobre a nossa escala do Oficina de Ballet.'
+      'Olá Ana! Aqui é da coordenação do Instituto Trindade Solidária (Trindade). Gostaria de falar sobre a nossa escala do Treinos Esportivos.'
     );
   });
 
@@ -97,7 +97,7 @@ describe('WhatsApp e CSV', () => {
 
 describe('formulário', () => {
   it('as opções dos selects seguem a ordem original', () => {
-    expect(AREAS[0]).toBe('Oficina de Ballet');
+    expect(AREAS[0]).toBe('Treinos Esportivos');
     expect(AREAS).toHaveLength(7);
     expect(DISPONIBILIDADES[0]).toBe('Sábados (Manhã)');
     expect(DISPONIBILIDADES).toHaveLength(6);

@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  *
- * Associação Novo Amanhecer - Trindade/Goiás
+ * Instituto Trindade Solidária - Trindade/Goiás
  * Portal Institucional & Painel Administrativo Completo
  */
 
@@ -13,6 +13,7 @@ import { Sobre } from './components/public/Sobre';
 import { ImpactoNumeros } from './components/public/ImpactoNumeros';
 import { ProjetosSection } from './components/public/ProjetosSection';
 import { Destaques } from './components/public/Destaques';
+import { Objetivos } from './components/public/Objetivos';
 import { GaleriaLightbox } from './components/public/GaleriaLightbox';
 import { ComoAjudar } from './components/public/ComoAjudar';
 import { TransparenciaSection } from './components/public/TransparenciaSection';
@@ -61,19 +62,19 @@ import { CheckCircle2, AlertCircle } from 'lucide-react';
 export default function App() {
   // Estado de Conteúdo do Site (CMS sincronizado com SQLite)
   const [content, setContent] = useState<SiteContent>(() => {
-    const saved = localStorage.getItem('ana_trindade_content');
+    const saved = localStorage.getItem('its_content');
     return saved ? JSON.parse(saved) : INITIAL_SITE_CONTENT;
   });
 
   // Estado dos Cards de Projetos Sociais
   const [projects, setProjects] = useState<ProjectCard[]>(() => {
-    const saved = localStorage.getItem('ana_trindade_projects');
+    const saved = localStorage.getItem('its_projects');
     return saved ? JSON.parse(saved) : INITIAL_PROJECTS;
   });
 
   // Estado da Galeria de Fotos
   const [gallery, setGallery] = useState<GalleryPhoto[]>(() => {
-    const saved = localStorage.getItem('ana_trindade_gallery');
+    const saved = localStorage.getItem('its_gallery');
     return saved ? JSON.parse(saved) : INITIAL_GALLERY;
   });
 
@@ -83,7 +84,7 @@ export default function App() {
 
   // Estado dos Administradores
   const [admins, setAdmins] = useState<AdminUser[]>(() => {
-    const saved = localStorage.getItem('ana_trindade_admins');
+    const saved = localStorage.getItem('its_admins');
     return saved ? JSON.parse(saved) : INITIAL_ADMINS;
   });
 
@@ -230,15 +231,15 @@ export default function App() {
 
         if (dbContent) {
           setContent(dbContent);
-          localStorage.setItem('ana_trindade_content', JSON.stringify(dbContent));
+          localStorage.setItem('its_content', JSON.stringify(dbContent));
         }
         if (dbProjects && Array.isArray(dbProjects) && dbProjects.length > 0) {
           setProjects(dbProjects);
-          localStorage.setItem('ana_trindade_projects', JSON.stringify(dbProjects));
+          localStorage.setItem('its_projects', JSON.stringify(dbProjects));
         }
         if (dbGallery && Array.isArray(dbGallery) && dbGallery.length > 0) {
           setGallery(dbGallery);
-          localStorage.setItem('ana_trindade_gallery', JSON.stringify(dbGallery));
+          localStorage.setItem('its_gallery', JSON.stringify(dbGallery));
         }
       } catch {
         // Usa dados locais se servidor inicializando
@@ -319,7 +320,7 @@ export default function App() {
 
   const handleUpdateProjects = async (newProjects: ProjectCard[]) => {
     setProjects(newProjects);
-    localStorage.setItem('ana_trindade_projects', JSON.stringify(newProjects));
+    localStorage.setItem('its_projects', JSON.stringify(newProjects));
     try {
       await api.updateProjects(newProjects);
     } catch {
@@ -329,7 +330,7 @@ export default function App() {
 
   const handleUpdateContent = async (newContent: SiteContent) => {
     setContent(newContent);
-    localStorage.setItem('ana_trindade_content', JSON.stringify(newContent));
+    localStorage.setItem('its_content', JSON.stringify(newContent));
     try {
       await api.updateSiteContent(newContent);
     } catch {
@@ -339,7 +340,7 @@ export default function App() {
 
   const handleUpdateGallery = async (newPhotos: GalleryPhoto[]) => {
     setGallery(newPhotos);
-    localStorage.setItem('ana_trindade_gallery', JSON.stringify(newPhotos));
+    localStorage.setItem('its_gallery', JSON.stringify(newPhotos));
     try {
       await api.updateGallery(newPhotos);
     } catch {
@@ -408,7 +409,7 @@ export default function App() {
           role="status"
           className="fixed right-4 top-20 z-50 flex max-w-sm items-center gap-2.5 rounded-md bg-ink px-4 py-3 text-sm text-white"
         >
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-sun" />
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-lima" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -422,11 +423,12 @@ export default function App() {
 
       <main className="flex-1">
         <Hero content={content} onOpenCadastro={() => handleOpenCadastro()} />
-        <ImpactoNumeros content={content} />
         <ProjetosSection projects={projects} onOpenCadastro={handleOpenCadastro} />
+        <ImpactoNumeros content={content} />
+        <Sobre content={content} />
+        <Objetivos />
         <Destaques instagramUrl={content.instagram_url} />
         <GaleriaLightbox photos={gallery} projects={projects} instagramUrl={content.instagram_url} />
-        <Sobre content={content} />
         <ComoAjudar
           content={content}
           onOpenVoluntarioModal={() => setIsVoluntarioModalOpen(true)}
@@ -439,6 +441,7 @@ export default function App() {
           onAddBeneficiary={handleAddBeneficiary}
           defaultProject={predefinedProject}
           onOpenPrivacidade={() => setIsPoliticaModalOpen(true)}
+          whatsapp={content.contato_whatsapp}
         />
       </main>
 

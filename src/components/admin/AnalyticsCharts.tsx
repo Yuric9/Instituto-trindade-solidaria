@@ -37,12 +37,12 @@ interface AnalyticsChartsProps {
   onUpdateVolunteers?: (volunteers: Volunteer[]) => void;
 }
 
-// Cores temáticas para os projetos sociais da associação
+// Cores de cada área de atuação do Instituto (as duas primeiras vêm do logo)
 const PROJECT_COLORS: Record<string, string> = {
-  'Aulas de Ballet Solidário': '#ec4899', // Rosa
-  'Escolinha de Futebol Comunitário': '#059669', // Verde Esmeralda
-  'Projeto Book Solidário para Gestantes': '#8b5cf6', // Violeta
-  'Festas em Datas Comemorativas': '#f59e0b', // Âmbar / Laranja
+  'Centro de Iniciação Esportiva': '#93c01f', // Verde do logo
+  'Cestas Básicas e Primeira Necessidade': '#00a6e6', // Azul-claro do logo
+  'Moradia Digna': '#f97316', // Laranja
+  'Educação e Cidadania': '#8b5cf6', // Violeta
 };
 
 const FALLBACK_COLORS = [
@@ -328,13 +328,13 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
         <div className="bg-white p-5 rounded-[14px] border border-line shadow-2xs space-y-1">
           <div className="flex items-center justify-between text-muted text-xs font-bold uppercase">
-            <span>Oficinas Ativas</span>
+            <span>Áreas Ativas</span>
             <Sparkles className="w-4 h-4 text-amber-500" />
           </div>
           <div className="text-2xl font-black text-amber-700">
             {projects.filter((p) => p.ativo).length}
           </div>
-          <div className="text-[11px] text-muted">Ballet, Futebol, Gestante, Festas</div>
+          <div className="text-[11px] text-muted">Esporte, Cestas, Moradia, Cidadania</div>
         </div>
       </div>
 

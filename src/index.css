@@ -1,37 +1,40 @@
 @import "tailwindcss";
 
-/* Identidade visual da Associação Novo Amanhecer — versão 2 (paleta azul).
-   Azul institucional + dourado do sol (fixo) + base neutra quente, fonte única (Manrope).
-   Para trocar a paleta do site inteiro, altere as variáveis --color-brand-* e os valores
-   RGB usados nos degradês (--brand-rgb e --brand-rgb-2) logo abaixo. */
+/* Identidade visual do Instituto Trindade Solidária (cores tiradas do arquivo do logo).
+   Azul petróleo (fundo do logo) + verde-limão e azul-claro (símbolo), fonte Montserrat.
+   Para trocar a paleta do site inteiro, altere as variáveis --color-* e os valores RGB
+   usados nos degradês (--brand-rgb e --brand-rgb-2) logo abaixo. */
 @theme {
-  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --color-brand: #1f4e8c;
-  --color-brand-dark: #12284a;
-  --color-brand-soft: #e6eef8;
-  --color-brand-ink: #1a4273;
-  --color-brand-light: #d6e1f0;
-  --color-brand-muted: #9fb3cf;
-  --color-brand-line: #243e66;
-  --color-sun: #e3a21a;
-  --color-sun-dark: #c98d10;
-  --color-sun-soft: #fbf1da;
-  --color-sun-ink: #6b4a06;
-  --color-hill: #2f6b3a;
+  /* Azul petróleo do logo (#01303C) e tons derivados */
+  --color-brand: #00709a;        /* azul do logo escurecido: texto branco legível em botões */
+  --color-brand-dark: #01303c;   /* fundo do logo */
+  --color-brand-soft: #e2f3f9;
+  --color-brand-ink: #015a7a;
+  --color-brand-light: #cfe4ea;  /* texto sobre fundo escuro */
+  --color-brand-muted: #8eb0ba;
+  --color-brand-line: #164b58;
+  /* Azul-claro das mãos do logo (#00A6E6) — destaques, nunca texto pequeno sobre branco */
+  --color-ceu: #00a6e6;
+  /* Verde-limão do logo (#AEC90B) e o verde da sombra (#93C01F) */
+  --color-lima: #aec90b;
+  --color-lima-dark: #93c01f;
+  --color-lima-soft: #f2f7d4;
+  --color-lima-ink: #4b5a00;
 
-  --color-ink: #1c1917;
-  --color-body: #44403c;
-  --color-muted: #57534e;
-  --color-line: #e4e1d8;
-  --color-line-strong: #d6d1c4;
-  --color-paper: #f7f5ef;
-  --color-sand: #f3efe8;
+  --color-ink: #0d1f24;
+  --color-body: #33474d;
+  --color-muted: #50646a;
+  --color-line: #dbe4e3;
+  --color-line-strong: #c4d2d1;
+  --color-paper: #f5f8f7;
+  --color-sand: #ebf1f0;
 }
 
 :root {
-  --brand-rgb: 18, 40, 74;
-  --brand-rgb-2: 31, 78, 140;
+  --brand-rgb: 1, 48, 60;
+  --brand-rgb-2: 0, 112, 154;
 }
 
 @layer base {
@@ -60,17 +63,23 @@
   .container-site {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-12;
   }
+  /* Rótulo acima dos títulos: traço verde-limão + texto em caixa alta (como no banner) */
   .kicker {
-    @apply text-[13px] font-extrabold uppercase tracking-[0.04em] text-brand sm:text-sm;
+    @apply inline-flex items-center gap-2.5 text-[13px] font-extrabold uppercase tracking-[0.12em] text-brand sm:text-sm;
   }
+  .kicker::before {
+    content: '';
+    @apply h-1 w-7 shrink-0 -skew-x-[20deg] bg-lima;
+  }
+  /* Títulos de seção em caixa alta e peso máximo, no estilo "INICIAÇÃO ESPORTIVA" */
   .section-title {
-    @apply text-[28px] font-extrabold leading-[1.15] tracking-[-0.03em] text-brand-dark sm:text-4xl lg:text-[40px];
+    @apply text-[28px] font-black uppercase leading-[1.05] tracking-[-0.02em] text-brand-dark sm:text-4xl lg:text-[44px];
   }
   .btn-primary {
     @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 text-[15px] font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60 bg-brand text-white hover:bg-brand-dark;
   }
-  .btn-sun {
-    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 text-[15px] font-extrabold transition-colors disabled:cursor-not-allowed disabled:opacity-60 bg-sun text-ink hover:bg-sun-dark;
+  .btn-lima {
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 text-[15px] font-extrabold transition-colors disabled:cursor-not-allowed disabled:opacity-60 bg-lima text-brand-dark uppercase tracking-wide hover:bg-lima-dark;
   }
   .btn-secondary {
     @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 text-[15px] font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60 border-2 border-brand bg-transparent text-brand hover:bg-brand hover:text-white;
@@ -82,13 +91,13 @@
     @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-5 text-[15px] font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60 bg-ink text-white hover:bg-black;
   }
   .card {
-    @apply rounded-[14px] border border-line bg-white shadow-[0_8px_24px_rgba(28,25,23,0.06)];
+    @apply rounded-[14px] border border-line bg-white shadow-[0_8px_24px_rgba(1,48,60,0.07)];
   }
   .card-glass {
     @apply rounded-[14px] border border-white/60 bg-white/90 backdrop-blur-md;
   }
   .stat-glass {
-    @apply rounded-xl border border-white/20 border-t-[3px] border-t-sun bg-white/[0.08];
+    @apply rounded-xl border border-white/20 border-t-[3px] border-t-lima bg-white/[0.08];
   }
   .link-underline {
     @apply alvo-toque border-b border-ink pb-0.5 text-[15px] font-semibold text-ink hover:border-brand hover:text-brand;
@@ -100,32 +109,36 @@
     @apply inline-flex items-center rounded px-2.5 py-1 text-[13px] font-semibold;
   }
 
-  /* Degradês e transparências da v2 */
-  .bg-hero-scrim {
-    background: linear-gradient(180deg, rgba(var(--brand-rgb), 0.05) 0%, rgba(var(--brand-rgb), 0.35) 32%,
-      rgba(var(--brand-rgb), 0.9) 50%, rgba(var(--brand-rgb), 0.97) 68%, rgba(var(--brand-rgb), 1) 100%);
-  }
-  @media (min-width: 64rem) {
-    .bg-hero-scrim {
-      background: linear-gradient(90deg, rgba(var(--brand-rgb), 0.95) 0%, rgba(var(--brand-rgb), 0.82) 38%,
-        rgba(var(--brand-rgb), 0.2) 68%, rgba(var(--brand-rgb), 0) 100%);
-    }
-  }
+  /* Fundos e cortes diagonais do layout esportivo */
   .bg-band {
     background: linear-gradient(120deg, var(--color-brand-dark) 0%, var(--color-brand) 100%);
   }
-  .bg-card-scrim {
-    background: linear-gradient(180deg, rgba(var(--brand-rgb), 0) 45%, rgba(var(--brand-rgb), 0.55) 100%);
-  }
-  .bg-news-scrim {
-    background: linear-gradient(180deg, rgba(var(--brand-rgb), 0) 0%, rgba(var(--brand-rgb), 0.9) 55%,
-      rgba(var(--brand-rgb), 0.97) 100%);
-  }
-  .bg-help {
-    background: linear-gradient(120deg, rgba(var(--brand-rgb), 0.93) 0%, rgba(var(--brand-rgb-2), 0.82) 100%);
-  }
   .bg-footer {
-    background: linear-gradient(180deg, var(--color-brand-dark) 0%, rgba(var(--brand-rgb), 1) 60%, #0e0d0c 140%);
+    background: var(--color-brand-dark);
+  }
+  /* Textura sutil de pontos sobre o azul petróleo, como no fundo do banner */
+  .bg-pontos {
+    background-color: var(--color-brand-dark);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  /* Corte diagonal na base de uma seção (a próxima seção "entra" em ângulo) */
+  .corte-base {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4vw), 0 100%);
+  }
+  .corte-topo {
+    clip-path: polygon(0 4vw, 100% 0, 100% 100%, 0 100%);
+  }
+  /* Faixas inclinadas verde-limão e azul (detalhe da ficha de inscrição) */
+  .faixas-marca {
+    background: linear-gradient(
+      115deg,
+      transparent 0 38%,
+      var(--color-lima) 38% 52%,
+      transparent 52% 56%,
+      var(--color-ceu) 56% 70%,
+      transparent 70%
+    );
   }
 }
 

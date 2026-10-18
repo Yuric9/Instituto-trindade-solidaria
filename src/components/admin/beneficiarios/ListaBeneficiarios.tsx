@@ -149,6 +149,20 @@ export const ListaBeneficiarios: React.FC<ListaBeneficiariosProps> = ({
                   </span>
                 </div>
 
+                {b.ficha && (
+                  <div className="text-xs text-body bg-lima-soft p-2 rounded-xl border border-lima/40 mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                    <span><strong>Categoria:</strong> {b.ficha.categoria || '—'}</span>
+                    <span><strong>Sexo:</strong> {b.ficha.sexo || '—'}</span>
+                    {b.ficha.rg && <span><strong>RG:</strong> {b.ficha.rg}</span>}
+                    {b.ficha.responsavel && (
+                      <span>
+                        <strong>Responsável:</strong> {b.ficha.responsavel.nome} · CPF {b.ficha.responsavel.cpf} · {b.ficha.responsavel.telefone}
+                      </span>
+                    )}
+                    <span><strong>Termos:</strong> {b.ficha.termos_aceitos ? 'aceitos' : 'pendentes'}</span>
+                  </div>
+                )}
+
                 {b.observacoes && (
                   <div className="text-xs text-body bg-amber-50/60 p-2 rounded-xl border border-amber-100/60 mt-1">
                     <strong>Obs:</strong> {b.observacoes}

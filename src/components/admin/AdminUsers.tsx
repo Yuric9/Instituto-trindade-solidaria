@@ -299,7 +299,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ currentEmail, currentUse
                   id="usuario-mail-login"
                   type="email"
                   required
-                  placeholder="maria@novoamanhecer.org.br"
+                  placeholder="maria@institutotrindadesolidaria.org.br"
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                   className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-paper border border-line rounded-xl focus:outline-none focus:ring-2 focus:ring-brand/30"

@@ -23,7 +23,7 @@ function ben(over: Partial<Beneficiary>): Beneficiary {
     telefone: '(62) 90000-0000',
     email: '',
     endereco: 'Trindade - GO',
-    projeto: 'Escolinha de Futebol Comunitário',
+    projeto: 'Centro de Iniciação Esportiva',
     status: 'Pendente',
     observacoes: '',
     criado_em: '2026-01-01',
@@ -33,11 +33,11 @@ function ben(over: Partial<Beneficiary>): Beneficiary {
 }
 
 const BASE = [
-  ben({ id: '1', nome: 'Ana Clara Peixoto', cpf: '012.345.678-90', telefone: '(62) 99124-5533', projeto: 'Aulas de Ballet Solidário', status: 'Aprovado' }),
-  ben({ id: '2', nome: 'João Pedro', cpf: '529.982.247-25', telefone: '(62) 98888-1111', projeto: 'Escolinha de Futebol Comunitário', status: 'Pendente' }),
-  ben({ id: '3', nome: 'Mariana Gestante', cpf: '111.444.777-35', projeto: 'Projeto Book Solidário para Gestantes', status: 'Em análise' }),
-  ben({ id: '4', nome: 'Família Souza', projeto: 'Festas em Datas Comemorativas', status: 'Atendido/Entregue' }),
-  ben({ id: '5', nome: 'Luana Dança', projeto: 'Oficina de Dança Livre', status: 'Recusado' }),
+  ben({ id: '1', nome: 'Ana Clara Peixoto', cpf: '012.345.678-90', telefone: '(62) 99124-5533', projeto: 'Moradia Digna', status: 'Aprovado' }),
+  ben({ id: '2', nome: 'João Pedro', cpf: '529.982.247-25', telefone: '(62) 98888-1111', projeto: 'Centro de Iniciação Esportiva', status: 'Pendente' }),
+  ben({ id: '3', nome: 'Mariana Souza', cpf: '111.444.777-35', projeto: 'Cestas Básicas e Primeira Necessidade', status: 'Em análise' }),
+  ben({ id: '4', nome: 'Família Souza', projeto: 'Educação e Cidadania', status: 'Atendido/Entregue' }),
+  ben({ id: '5', nome: 'Luana Capoeira', projeto: 'Aulas de Capoeira', status: 'Recusado' }),
 ];
 
 const filtrar = (f: Partial<Filtros>) => filtrarBeneficiarios(BASE, { ...FILTROS_VAZIOS, ...f }).map((b) => b.id);
@@ -48,24 +48,26 @@ describe('normalize e isProjectMatch', () => {
   });
 
   it.each([
-    ['Escolinha de Futebol Comunitário', 'futebol', true],
-    ['Futsal de Sábado', 'futebol', true],
-    ['Aulas de Ballet Solidário', 'ballet', true],
-    ['Oficina de Dança Livre', 'ballet', false], // dança é um projeto próprio, não ballet
-    ['Aulas de Dança', 'Aulas de Dança', true],
-    ['Projeto Book Solidário para Gestantes', 'book', true],
-    ['Festas em Datas Comemorativas', 'festas', true],
-    ['Aulas de Ballet Solidário', 'futebol', false],
+    ['Centro de Iniciação Esportiva', 'esporte', true],
+    ['Futsal de Sábado', 'esporte', true],
+    ['Cestas Básicas e Primeira Necessidade', 'cestas', true],
+    ['Distribuição de Alimentos', 'cestas', true],
+    ['Moradia Digna', 'moradia', true],
+    ['Reforma de Casas', 'moradia', true],
+    ['Educação e Cidadania', 'cidadania', true],
+    ['Reforço Escolar', 'cidadania', true], // sem acento também casa ("reforco")
+    ['Aulas de Capoeira', 'esporte', false], // capoeira é um projeto próprio
+    ['Aulas de Capoeira', 'Aulas de Capoeira', true],
+    ['Moradia Digna', 'esporte', false],
     ['Qualquer projeto', 'todos', true],
-    ['Aulas de Ballet Solidário', 'Aulas de Ballet Solidário', true],
-    ['Aulas de Ballet Solidário', 'ballet solid', true], // trecho do nome
+    ['Centro de Iniciação Esportiva', 'iniciação', true], // trecho do nome
   ])('isProjectMatch(%s, %s) = %s', (projeto, filtro, esperado) => {
     expect(isProjectMatch(projeto, filtro)).toBe(esperado);
   });
 
   it('filtroDoProjeto troca o nome pelo atalho quando existe um', () => {
-    expect(filtroDoProjeto('Escolinha de Futebol Comunitário')).toBe('futebol');
-    expect(filtroDoProjeto('Projeto Book Solidário para Gestantes')).toBe('book');
+    expect(filtroDoProjeto('Centro de Iniciação Esportiva')).toBe('esporte');
+    expect(filtroDoProjeto('Moradia Digna')).toBe('moradia');
     expect(filtroDoProjeto('Horta Comunitária')).toBe('Horta Comunitária');
   });
 });
@@ -95,9 +97,9 @@ describe('filtrarBeneficiarios', () => {
   });
 
   it('combina status e projeto', () => {
-    expect(filtrar({ projeto: 'ballet' })).toEqual(['1']); // a "Oficina de Dança Livre" não é ballet
-    expect(filtrar({ projeto: 'Oficina de Dança Livre' })).toEqual(['5']);
-    expect(filtrar({ projeto: 'ballet', status: 'Aprovado' })).toEqual(['1']);
+    expect(filtrar({ projeto: 'esporte' })).toEqual(['2']); // a capoeira não entra no atalho do esporte
+    expect(filtrar({ projeto: 'Aulas de Capoeira' })).toEqual(['5']);
+    expect(filtrar({ projeto: 'moradia', status: 'Aprovado' })).toEqual(['1']);
     expect(filtrar({ status: 'Pendente', busca: 'ana' })).toEqual([]);
   });
 
@@ -109,8 +111,8 @@ describe('filtrarBeneficiarios', () => {
 });
 
 describe('contagens', () => {
-  it('conta por projeto (a "Dança" não entra na conta do ballet)', () => {
-    expect(contarPorProjeto(BASE)).toEqual({ todos: 5, futebol: 1, ballet: 1, book: 1, festas: 1 });
+  it('conta por área (projetos de fora das 4 áreas só entram no total)', () => {
+    expect(contarPorProjeto(BASE)).toEqual({ todos: 5, esporte: 1, cestas: 1, moradia: 1, cidadania: 1 });
   });
 
   it('conta por status e calcula a porcentagem do total', () => {
@@ -129,19 +131,19 @@ describe('contagens', () => {
 
 describe('opcoesDeProjeto (campo Projeto no cadastro/edição)', () => {
   const projetos = [
-    { id: 'proj-ballet', titulo: 'Ballet — Na Pontinha do Pé' },
-    { id: 'proj-1', titulo: 'Aulas de Dança' },
+    { id: 'proj-esporte', titulo: 'Iniciação Esportiva — Setor Solange' },
+    { id: 'proj-1', titulo: 'Aulas de Capoeira' },
   ] as ProjectCard[];
 
-  it('inclui os nomes antigos e os projetos novos do banco', () => {
+  it('inclui as 4 áreas e os projetos novos do banco', () => {
     const opcoes = opcoesDeProjeto(projetos);
-    expect(opcoes).toContain('Aulas de Ballet Solidário');
-    expect(opcoes).toContain('Aulas de Dança');
-    expect(opcoes).not.toContain('Ballet — Na Pontinha do Pé'); // já coberto por "Aulas de Ballet Solidário"
+    expect(opcoes).toContain('Centro de Iniciação Esportiva');
+    expect(opcoes).toContain('Aulas de Capoeira');
+    expect(opcoes).not.toContain('Iniciação Esportiva — Setor Solange'); // já coberto por "Centro de Iniciação Esportiva"
   });
 
   it('mantém o projeto atual da pessoa, mesmo que não esteja na lista (salvar não troca sem querer)', () => {
-    expect(opcoesDeProjeto(projetos, 'Ballet — Na Pontinha do Pé')).toContain('Ballet — Na Pontinha do Pé');
+    expect(opcoesDeProjeto(projetos, 'Iniciação Esportiva — Setor Solange')).toContain('Iniciação Esportiva — Setor Solange');
     expect(opcoesDeProjeto([], 'Projeto que foi apagado')).toContain('Projeto que foi apagado');
   });
 });
@@ -149,13 +151,12 @@ describe('opcoesDeProjeto (campo Projeto no cadastro/edição)', () => {
 describe('nomeArquivoCsv', () => {
   it.each([
     ['todos', undefined],
-    ['futebol', 'inscritos_apenas_futebol_2026-10-13.csv'],
-    ['Aulas de Ballet Solidário', 'inscritos_apenas_ballet_2026-10-13.csv'],
-    ['book', 'inscritos_apenas_book_gestante_2026-10-13.csv'],
-    ['festas', 'inscritos_apenas_festas_2026-10-13.csv'],
+    ['esporte', 'inscritos_apenas_esporte_2026-10-13.csv'],
+    ['Cestas Básicas e Primeira Necessidade', 'inscritos_apenas_cestas_2026-10-13.csv'],
+    ['moradia', 'inscritos_apenas_moradia_2026-10-13.csv'],
+    ['cidadania', 'inscritos_apenas_cidadania_2026-10-13.csv'],
     ['Horta Comunitária', 'inscritos_horta_comunit_ria_2026-10-13.csv'],
   ])('projeto "%s" → %s', (projeto, esperado) => {
     expect(nomeArquivoCsv(projeto, '2026-10-13')).toBe(esperado);
   });
 });
-

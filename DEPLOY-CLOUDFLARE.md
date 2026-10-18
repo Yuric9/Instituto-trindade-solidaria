@@ -2,15 +2,30 @@
 
 O site roda como um único Cloudflare Worker:
 
-- `worker/` — API (`/api/*`) com banco **D1** (`novo-amanhecer-db`, já criado na conta).
+- `worker/` — API (`/api/*`) com banco **D1** (`trindade-solidaria-db`) e fotos no **R2** (`trindade-solidaria-fotos`).
 - `src/` — site React, compilado pelo Vite em `dist/` e servido pelo próprio Worker.
 - `migrations/0001_init.sql` — estrutura do banco. O Worker também cria as tabelas sozinho
   na primeira requisição, então não é preciso rodar migração manualmente.
 
+## 0. Criar o banco e o armazenamento de fotos (só na primeira vez)
+
+O `wrangler.jsonc` ainda tem um **marcador** no lugar do id do banco. Antes do primeiro deploy:
+
+```bash
+npx wrangler login
+npx wrangler d1 create trindade-solidaria-db          # copie o "database_id" mostrado
+npx wrangler r2 bucket create trindade-solidaria-fotos
+# opcional, para as prévias de cada branch/PR:
+npx wrangler d1 create trindade-solidaria-db-preview
+npx wrangler r2 bucket create trindade-solidaria-fotos-preview
+```
+
+Cole o `database_id` de cada banco no `wrangler.jsonc` (troque os `00000000-...`) e faça commit.
+
 ## 1. Conectar o GitHub (deploy automático a cada push na `main`)
 
 1. Painel da Cloudflare → **Workers & Pages** → **Create** → **Import a repository**.
-2. Escolha `Yuric9/associa-ao-novo-amanhecer`.
+2. Escolha `Yuric9/Instituto-trindade-solidaria`.
 3. Configuração de build:
    - **Build command:** `npm run build`
    - **Deploy command:** `npx wrangler deploy`
@@ -25,7 +40,8 @@ O site roda como um único Cloudflare Worker:
 | `RESEND_API_KEY` | opcional: chave do Resend. O sistema só manda e-mail no "Esqueci minha senha"; sem a chave, o administrador redefine a senha pela aba Usuários |
 
 As variáveis não secretas (`ADMIN_EMAIL`, `EMAIL_FROM`, `SEED_DEMO_DATA`)
-ficam em `wrangler.jsonc`. Altere lá e faça push.
+ficam em `wrangler.jsonc`. **Troque o `ADMIN_EMAIL`** (hoje `coordenacao@institutotrindadesolidaria.org.br`,
+um endereço provisório) pelo e-mail real de quem vai administrar, e faça push.
 
 > A conta administrativa é criada automaticamente na primeira visita, **somente** se o banco
 > não tiver nenhum usuário e `ADMIN_INITIAL_PASSWORD` estiver definido. Depois do primeiro
@@ -45,7 +61,7 @@ Login: `ADMIN_EMAIL` + `ADMIN_INITIAL_PASSWORD` do `.dev.vars`.
 ## 4. Backup automático do banco
 
 - Todo dia às **03:00 (Brasília)** o Worker grava uma cópia completa do banco no R2
-  (bucket `novo-amanhecer-fotos`, pasta `backups/`). Ficam os **últimos 30 dias**.
+  (bucket `trindade-solidaria-fotos`, pasta `backups/`). Ficam os **últimos 30 dias**.
   O agendamento está em `wrangler.jsonc` → `triggers.crons`; o código, em `worker/backup.ts`.
 - No painel (aba **Backup e dados**, só administrador): lista dos backups, botão
   **Fazer backup agora** e download de cada arquivo.

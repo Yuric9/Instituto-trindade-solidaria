@@ -10,14 +10,14 @@ export interface Filtros {
   tipoBusca: TipoBusca;
   /** 'todos' ou um BeneficiaryStatus */
   status: string;
-  /** 'todos', um dos atalhos (futebol, ballet, book, festas) ou o título de um projeto */
+  /** 'todos', um dos atalhos (esporte, cestas, moradia, cidadania) ou o título de um projeto */
   projeto: string;
 }
 
 export const FILTROS_VAZIOS: Filtros = { busca: '', tipoBusca: 'todos', status: 'todos', projeto: 'todos' };
 
 /** Atalhos de projeto que aparecem como botões de filtro rápido. */
-export const ATALHOS_PROJETO = ['futebol', 'ballet', 'book', 'festas'] as const;
+export const ATALHOS_PROJETO = ['esporte', 'cestas', 'moradia', 'cidadania'] as const;
 export type AtalhoProjeto = (typeof ATALHOS_PROJETO)[number];
 
 export const STATUS_BENEFICIARIO: BeneficiaryStatus[] = [
@@ -44,18 +44,18 @@ export function isProjectMatch(beneficiaryProject: string, filterVal: string): b
   const bLower = normalize(beneficiaryProject);
   const fLower = normalize(filterVal);
 
-  if (fLower === 'futebol' || fLower === 'apenas futebol') {
-    return bLower.includes('futebol') || bLower.includes('futsal');
+  const contem = (...trechos: string[]) => trechos.some((t) => bLower.includes(t));
+  if (fLower === 'esporte' || fLower === 'apenas esporte') {
+    return contem('esport', 'futebol', 'futsal');
   }
-  if (fLower === 'ballet' || fLower === 'apenas ballet') {
-    // Só "ballet": outras danças (ex.: "Aulas de Dança") são projetos próprios
-    return bLower.includes('ballet');
+  if (fLower === 'cestas' || fLower === 'apenas cestas') {
+    return contem('cesta', 'aliment', 'primeira necessidade');
   }
-  if (fLower === 'book' || fLower === 'apenas book' || fLower === 'gestante' || fLower === 'apenas book gestante') {
-    return bLower.includes('book') || bLower.includes('gestante');
+  if (fLower === 'moradia' || fLower === 'apenas moradia') {
+    return contem('moradia', 'reforma', 'habita', 'constru');
   }
-  if (fLower === 'festas' || fLower === 'apenas festas' || fLower === 'datas comemorativas') {
-    return bLower.includes('festa') || bLower.includes('data');
+  if (fLower === 'cidadania' || fLower === 'apenas cidadania') {
+    return contem('cidadania', 'educa', 'reforco', 'oficina');
   }
 
   return bLower.includes(fLower);
@@ -68,7 +68,7 @@ export function filtroDoProjeto(projeto: string): string {
 
 /** Quantos beneficiários há em cada atalho de projeto (e no total). */
 export function contarPorProjeto(beneficiaries: Beneficiary[]) {
-  const counts = { todos: beneficiaries.length, futebol: 0, ballet: 0, book: 0, festas: 0 };
+  const counts = { todos: beneficiaries.length, esporte: 0, cestas: 0, moradia: 0, cidadania: 0 };
   beneficiaries.forEach((b) => {
     for (const atalho of ATALHOS_PROJETO) {
       if (isProjectMatch(b.projeto, atalho)) counts[atalho]++;
@@ -138,13 +138,8 @@ export function contarPorStatus(filtrados: Beneficiary[], totalGeral: number) {
 
 /** Nome do arquivo CSV conforme o projeto filtrado (undefined = nome padrão do exportador). */
 export function nomeArquivoCsv(projeto: string, data: string): string | undefined {
-  const p = projeto.toLowerCase();
-  if (projeto === 'futebol' || p.includes('futebol')) return `inscritos_apenas_futebol_${data}.csv`;
-  if (projeto === 'ballet' || p.includes('ballet')) return `inscritos_apenas_ballet_${data}.csv`;
-  if (projeto === 'book' || p.includes('book') || p.includes('gestante')) {
-    return `inscritos_apenas_book_gestante_${data}.csv`;
-  }
-  if (projeto === 'festas' || p.includes('festa')) return `inscritos_apenas_festas_${data}.csv`;
+  const atalho = ATALHOS_PROJETO.find((a) => projeto === a || isProjectMatch(projeto, a));
+  if (atalho) return `inscritos_apenas_${atalho}_${data}.csv`;
   if (projeto !== 'todos') return `inscritos_${projeto.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}_${data}.csv`;
   return undefined;
 }
@@ -152,17 +147,17 @@ export function nomeArquivoCsv(projeto: string, data: string): string | undefine
 /** Data de hoje no formato AAAA-MM-DD. */
 export const hoje = () => new Date().toISOString().split('T')[0];
 
-/** Nomes de projeto usados nas inscrições antigas (antes dos projetos virem do banco). */
+/** Nomes das 4 áreas de atuação (sempre aparecem como opção de projeto, mesmo antes de virem do banco). */
 export const PROJETOS_LEGADOS = [
-  'Escolinha de Futebol Comunitário',
-  'Aulas de Ballet Solidário',
-  'Projeto Book Solidário para Gestantes',
-  'Festas em Datas Comemorativas',
+  'Centro de Iniciação Esportiva',
+  'Cestas Básicas e Primeira Necessidade',
+  'Moradia Digna',
+  'Educação e Cidadania',
 ];
 
 /**
  * Opções do campo "Projeto" ao cadastrar ou editar um beneficiário no painel:
- * os 4 nomes antigos + todo projeto do banco que não seja um deles (ex.: "Aulas de Dança")
+ * as 4 áreas de atuação + todo projeto do banco que não seja uma delas (ex.: "Oficina de Capoeira")
  * + o projeto atual da pessoa, se não estiver na lista (assim salvar nunca troca o projeto sem querer).
  */
 export function opcoesDeProjeto(projects: ProjectCard[] = [], atual?: string): string[] {

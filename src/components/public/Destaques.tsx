@@ -7,8 +7,8 @@ interface DestaquesProps {
 }
 
 const chipCor: Record<Destaque['cor'], string> = {
-  destaque: 'bg-sun text-ink font-extrabold',
-  sol: 'bg-sun-soft text-sun-ink font-extrabold',
+  destaque: 'bg-lima text-ink font-extrabold',
+  sol: 'bg-lima-soft text-lima-ink font-extrabold',
   marca: 'bg-brand-soft text-brand-ink font-extrabold',
 };
 
@@ -21,7 +21,7 @@ export const Destaques: React.FC<DestaquesProps> = ({ instagramUrl }) => {
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div className="flex flex-col gap-2 sm:gap-3">
           <span className="kicker">Destaques</span>
-          <h2 className="section-title">Acontece na associação</h2>
+          <h2 className="section-title">Acontece no instituto</h2>
         </div>
         <a href={instagramUrl} target="_blank" rel="noreferrer" className="link-arrow hidden sm:inline">
           Acompanhe no Instagram →

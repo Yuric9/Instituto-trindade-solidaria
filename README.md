@@ -1,26 +1,43 @@
-# Associação Novo Amanhecer
+# Instituto Trindade Solidária
 
-Portal institucional e painel administrativo da **Associação Novo Amanhecer** (Trindade/GO):
-acolhimento, projetos sociais, doações via PIX, voluntariado e transparência.
+Portal institucional e painel administrativo do **Instituto Trindade Solidária** (Trindade/GO),
+Organização da Sociedade Civil fundada em 20/10/2021 — *Amor e compaixão ao próximo*.
+CNPJ 45.698.518/0001-89.
+
+A estrutura técnica (API, banco, painel, testes) foi reaproveitada do projeto da Associação Novo Amanhecer;
+a identidade visual e o layout do site público são próprios do Instituto.
 
 ## Funcionalidades
 
-**Site público**
-- Apresentação da associação, projetos (futebol, ballet, book, ações sociais) e galeria de fotos
-- Números de impacto e seção de transparência
-- Doação via PIX com QR Code
-- Cadastro de beneficiários e de voluntários (com consentimento LGPD e proteção anti-spam)
+**Site público** (layout esportivo/diagonal, cores e fonte do logo)
+- Apresentação, áreas de atuação (Iniciação Esportiva, Cestas Básicas, Moradia Digna, Educação e Cidadania),
+  finalidades estatutárias, objetivos específicos e bairros atendidos
+- Doação via PIX (chave CNPJ) com QR Code
+- **Ficha de inscrição digital** do Centro de Iniciação Esportiva: categoria (Sub-09 a Sub-17, Feminino),
+  dados do responsável para menores e aceite das 6 declarações da ficha em papel
+- Inscrição nas outras áreas, cadastro de voluntários e parceiros (com consentimento LGPD e anti-spam)
 - Instalável no celular como aplicativo (PWA)
 
 **Painel administrativo** (`/admin`)
 - Login com perfis de acesso: administrador, coordenador, equipe e voluntário
-- Gestão de beneficiários, voluntários, doações, projetos, galeria e textos do site
+- Gestão de inscrições (com a ficha do atleta), voluntários, doações, áreas de atuação, galeria e textos do site
 - Gráficos, exportação CSV e backup
 - Backup automático diário do banco (últimos 30 dias, no R2), com download e restauração pelo painel
 - Registro de atividades (auditoria): quem fez o quê e quando, só para o administrador
 - Senhas sem depender de e-mail: cada pessoa troca a própria senha ("Trocar minha senha") e o
   administrador define uma senha provisória para quem esqueceu (aba Usuários)
-- Dados sensíveis (CPF, endereço, telefone) mascarados para o perfil voluntário
+- Dados sensíveis (CPF, RG, endereço, telefone, dados do responsável) mascarados para o perfil voluntário
+
+## Identidade visual
+
+| Cor | Código | Uso |
+|---|---|---|
+| Azul petróleo | `#01303C` | fundo do logo; cabeçalho, rodapé, títulos |
+| Verde-limão | `#AEC90B` / `#93C01F` | destaques e botão de doar |
+| Azul-claro | `#00A6E6` | detalhes e faixas |
+
+Fonte: **Montserrat**. Os arquivos do logo ficam em `public/marca/` (extraídos do arquivo original);
+as cores, em `src/index.css`.
 
 ## Tecnologias
 
@@ -29,7 +46,7 @@ acolhimento, projetos sociais, doações via PIX, voluntariado e transparência.
 | Frontend (`src/`) | React 19, TypeScript, Vite, Tailwind CSS, Recharts, Motion |
 | Backend (`worker/`) | Cloudflare Workers (API em `/api/*`) |
 | Banco de dados | Cloudflare D1 (SQLite) — estrutura em `migrations/` |
-| Fotos | Cloudflare R2 (bucket `novo-amanhecer-fotos`), servidas em `/api/fotos/...` |
+| Fotos | Cloudflare R2 (bucket `trindade-solidaria-fotos`), servidas em `/api/fotos/...` |
 | E-mail | Resend — usado **só** para recuperar senha (opcional) |
 
 O mesmo Worker responde a API e entrega o site compilado (pasta `dist/`).
@@ -41,8 +58,8 @@ src/
   components/public/   seções do site público
   components/admin/    painel administrativo (carregado sob demanda)
   services/api.ts      cliente da API usado pelo frontend
-  data/                conteúdo inicial do site
-  utils/               PIX, validações, exportação CSV
+  data/                conteúdo inicial do site e dados institucionais (instituto.ts)
+  utils/               PIX, validações, ficha de inscrição (ficha.ts), exportação CSV
 worker/
   index.ts             ponto de entrada do Worker
   routes/              rotas da API, um arquivo por assunto

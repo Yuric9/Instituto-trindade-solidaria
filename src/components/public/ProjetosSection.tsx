@@ -8,23 +8,29 @@ interface ProjetosSectionProps {
   onOpenCadastro: (projectName: string) => void;
 }
 
-/** Ícone de cada projeto, escolhido pelo nome (traço fino, mesmo estilo da v2). */
+/** Ícone de cada área, escolhido pelo nome (traço fino). */
 const ICONES: { chave: RegExp; d: string }[] = [
-  { chave: /ballet|dan[çc]a/i, d: 'M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM20 16a3 3 0 1 1-3-3 3 3 0 0 1 3 3z' },
-  { chave: /futebol|river|bola/i, d: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.5l3.8 2.8-1.4 4.4H9.6l-1.4-4.4zM12 3v4.5M20.3 9.6l-4.5.7M17.3 19.3l-2.9-4.6M6.7 19.3l2.9-4.6M3.7 9.6l4.5.7' },
-  { chave: /book|gestante|foto/i, d: 'M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z' },
-  { chave: /a[çc][õo]es|festa|social/i, d: 'M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-2 0-4-1-4-2.5S10 3 12 7zM12 7c2 0 4-1 4-2.5S14 3 12 7z' },
+  { chave: /esport|futebol|bola/i, d: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.5l3.8 2.8-1.4 4.4H9.6l-1.4-4.4zM12 3v4.5M20.3 9.6l-4.5.7M17.3 19.3l-2.9-4.6M6.7 19.3l2.9-4.6M3.7 9.6l4.5.7' },
+  { chave: /cesta|aliment|necessidade/i, d: 'M3 10h18l-2 10H5zM7 10l4-6M17 10l-4-6M9 14v3M12 14v3M15 14v3' },
+  { chave: /moradia|reforma|casa|constru/i, d: 'M3 11l9-7 9 7M5 10v10h14V10M10 20v-6h4v6' },
+  { chave: /educa|cidadania|escola|oficina/i, d: 'M2 6h6a4 4 0 0 1 4 4v10a3 3 0 0 0-3-3H2zM22 6h-6a4 4 0 0 0-4 4v10a3 3 0 0 1 3-3h7z' },
 ];
 const CORACAO = 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z';
 
 const ProjetoIcone: React.FC<{ titulo: string }> = ({ titulo }) => {
   const d = ICONES.find((i) => i.chave.test(titulo))?.d ?? CORACAO;
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d={d} />
     </svg>
   );
 };
+
+// As áreas alternam o verde-limão e o azul-claro do logo.
+const CORES = [
+  { faixa: 'bg-lima', icone: 'bg-lima text-brand-dark' },
+  { faixa: 'bg-ceu', icone: 'bg-ceu text-white' },
+];
 
 export const ProjetosSection: React.FC<ProjetosSectionProps> = ({ projects, onOpenCadastro }) => {
   const [selectedProject, setSelectedProject] = useState<ProjectCard | null>(null);
@@ -38,51 +44,60 @@ export const ProjetosSection: React.FC<ProjetosSectionProps> = ({ projects, onOp
   }, [selectedProject]);
 
   return (
-    <section id="projetos" className="bg-white">
-      <div className="container-site flex flex-col gap-6 py-12 sm:gap-11 sm:py-24">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div className="flex max-w-2xl flex-col gap-2 sm:gap-3">
-            <span className="kicker">Nossos projetos</span>
-            <h2 className="section-title">O que fazemos toda semana, de graça</h2>
+    <section id="projetos" className="bg-paper">
+      <div className="container-site flex flex-col gap-8 py-14 sm:gap-12 sm:py-24">
+        <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+          <div className="flex max-w-2xl flex-col gap-3">
+            <span className="kicker">Áreas de atuação</span>
+            <h2 className="section-title">Como transformamos realidades</h2>
           </div>
+          <p className="max-w-md text-[15px] leading-relaxed text-body">
+            Ações de proteção social básica, sempre gratuitas, em articulação com a rede socioassistencial de Trindade.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {activeProjects.map((project) => (
-            <article key={project.id} className="card flex flex-col overflow-hidden">
-              <div className="relative">
-                <Foto
-                  src={project.foto_url}
-                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                  alt={project.titulo}
-                  loading="lazy"
-                  className="block h-[180px] w-full bg-sand object-cover lg:h-[200px]"
-                />
-                <div className="bg-card-scrim absolute inset-0" />
-                <div className="absolute -bottom-6 left-4 flex h-12 w-12 items-center justify-center rounded-full border-4 border-white bg-brand text-white lg:-bottom-[26px] lg:left-5 lg:h-[52px] lg:w-[52px]">
-                  <ProjetoIcone titulo={project.titulo} />
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {activeProjects.map((project, i) => {
+            const cor = CORES[i % CORES.length];
+            return (
+              <article key={project.id} className="group relative flex flex-col overflow-hidden rounded-md bg-white shadow-[0_10px_30px_rgba(1,48,60,0.08)]">
+                <div className={`h-2 ${cor.faixa}`} />
+                <div className="relative">
+                  <Foto
+                    src={project.foto_url}
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    alt=""
+                    loading="lazy"
+                    className="block aspect-[8/5] w-full bg-brand-dark object-cover"
+                  />
+                  <span className="absolute left-4 top-3 text-5xl font-black leading-none text-white/90 drop-shadow">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                 </div>
-              </div>
-              <div className="flex flex-1 flex-col gap-2.5 px-[18px] pb-5 pt-9 lg:gap-3 lg:px-[22px] lg:pb-6 lg:pt-10">
-                <h3 className="text-lg font-extrabold text-brand-dark lg:text-[19px]">{project.titulo}</h3>
-                <p className="flex-1 text-[15px] leading-relaxed text-body">{project.descricao}</p>
-                {(project.idade_publico || project.horario) && (
-                  <div className="flex flex-wrap gap-2">
-                    {project.idade_publico && <span className="chip bg-sun-soft text-sun-ink">{project.idade_publico}</span>}
-                    {project.horario && <span className="chip bg-brand-soft text-brand-ink">{project.horario}</span>}
+                <div className="flex flex-1 flex-col gap-3 p-5 lg:p-6">
+                  <div className={`-mt-11 flex h-12 w-12 -skew-x-[10deg] items-center justify-center shadow-md ${cor.icone}`}>
+                    <span className="skew-x-[10deg]"><ProjetoIcone titulo={project.titulo} /></span>
                   </div>
-                )}
-                <div className="flex items-center gap-5 pt-1.5">
-                  <button onClick={() => onOpenCadastro(project.titulo)} className="link-arrow">
-                    Inscrever-se →
-                  </button>
-                  <button onClick={() => setSelectedProject(project)} className="alvo-toque text-[15px] font-semibold text-muted hover:text-ink">
-                    Saiba mais
-                  </button>
+                  <h3 className="text-lg font-black uppercase leading-tight text-brand-dark">{project.titulo}</h3>
+                  <p className="flex-1 text-[15px] leading-relaxed text-body">{project.descricao}</p>
+                  {(project.idade_publico || project.horario) && (
+                    <div className="flex flex-wrap gap-2">
+                      {project.idade_publico && <span className="chip bg-lima-soft text-lima-ink">{project.idade_publico}</span>}
+                      {project.horario && <span className="chip bg-brand-soft text-brand-ink">{project.horario}</span>}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-5 border-t border-line pt-3">
+                    <button onClick={() => setSelectedProject(project)} className="link-arrow uppercase tracking-wide">
+                      Saiba mais →
+                    </button>
+                    <button onClick={() => onOpenCadastro(project.titulo)} className="alvo-toque text-[14px] font-semibold text-muted hover:text-ink">
+                      Inscrever-se
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
 
@@ -105,7 +120,7 @@ export const ProjetosSection: React.FC<ProjetosSectionProps> = ({ projects, onOp
               </button>
             </div>
             <div className="flex flex-col gap-5 p-6 sm:p-8">
-              <h3 id="projeto-titulo" className="text-2xl font-bold text-ink">{selectedProject.titulo}</h3>
+              <h3 id="projeto-titulo" className="text-2xl font-black uppercase text-brand-dark">{selectedProject.titulo}</h3>
               <p className="text-[15px] leading-relaxed text-body">{selectedProject.descricao}</p>
               {selectedProject.detalhes && <p className="rounded-md bg-sand p-4 text-[15px] leading-relaxed text-body">{selectedProject.detalhes}</p>}
               <dl className="grid grid-cols-[110px_1fr] gap-y-2 border-t border-line pt-5 text-sm">
@@ -116,7 +131,7 @@ export const ProjetosSection: React.FC<ProjetosSectionProps> = ({ projects, onOp
               <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
                 <button onClick={() => setSelectedProject(null)} className="btn-secondary">Voltar</button>
                 <button onClick={() => { const title = selectedProject.titulo; setSelectedProject(null); onOpenCadastro(title); }} className="btn-primary">
-                  Inscrever-se neste projeto
+                  Quero participar
                 </button>
               </div>
             </div>

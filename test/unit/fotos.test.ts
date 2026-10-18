@@ -3,8 +3,8 @@ import { srcSetWebp } from '../../src/utils/fotos';
 
 describe('versões WebP das fotos fixas', () => {
   it('monta as três larguras para uma foto de /fotos', () => {
-    expect(srcSetWebp('/fotos/projeto-ballet.jpg')).toBe(
-      '/fotos/projeto-ballet-400.webp 400w, /fotos/projeto-ballet-800.webp 800w, /fotos/projeto-ballet.webp 1600w'
+    expect(srcSetWebp('/fotos/projeto-esporte.jpg')).toBe(
+      '/fotos/projeto-esporte-400.webp 400w, /fotos/projeto-esporte-800.webp 800w, /fotos/projeto-esporte.webp 1600w'
     );
   });
 

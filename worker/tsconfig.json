@@ -11,5 +11,5 @@
     "noEmit": true,
     "resolveJsonModule": true
   },
-  "include": ["./**/*.ts", "../src/data/initialData.ts", "../src/types/**/*.ts"]
+  "include": ["./**/*.ts", "../src/data/initialData.ts", "../src/types/**/*.ts", "../src/utils/ficha.ts"]
 }

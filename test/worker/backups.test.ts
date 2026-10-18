@@ -165,7 +165,7 @@ describe('registro de atividades do backup', () => {
     await agendar('2026-04-01T06:00:00Z');
     const logs = await (await api('/audit-logs', { cookie })).json<{ action: string; user_email: string | null; details: string }[]>();
     const backups = logs.filter((l) => l.action === 'BACKUP_CREATED');
-    expect(backups.find((l) => l.details.includes('(manual)'))?.user_email).toBe('coordenacao@novoamanhecer.org.br');
+    expect(backups.find((l) => l.details.includes('(manual)'))?.user_email).toBe('coordenacao@institutotrindadesolidaria.org.br');
     expect(backups.find((l) => l.details.includes('(agendado)'))?.user_email).toBeNull();
   });
 });

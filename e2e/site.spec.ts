@@ -11,27 +11,35 @@ test.beforeEach(async ({ page }) => {
 
 test('a página inicial abre com as seções principais e sem rolagem para o lado', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/Associação Novo Amanhecer/);
+  await expect(page).toHaveTitle(/Instituto Trindade Solidária/);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  for (const secao of ['#projetos', '#galeria', '#como-ajudar', '#cadastro', '#contato']) {
+  for (const secao of ['#projetos', '#sobre', '#objetivos', '#como-ajudar', '#transparencia', '#cadastro', '#contato']) {
     await expect(page.locator(secao)).toBeAttached();
   }
   const sobra = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(sobra).toBeLessThanOrEqual(0);
 });
 
-/** Preenche o formulário de inscrição como uma família faria e envia. */
+/** Preenche a ficha de inscrição da iniciação esportiva como uma família faria e envia. */
 async function inscrever(page: Page, nome: string, cpf: string) {
   await page.goto('/#cadastro');
-  await page.getByLabel(/Nome Completo/).first().fill(nome);
-  await page.getByLabel(/CPF/).fill(cpf);
+  await page.getByLabel(/Em qual ação/).selectOption({ label: 'Centro de Iniciação Esportiva' });
+  await page.getByLabel(/Nome completo do\(a\) atleta/).fill(nome);
+  await page.getByLabel(/CPF do\(a\) atleta/).fill(cpf);
   await page.getByLabel(/Data de Nascimento/).fill('2016-05-10');
   await page.getByLabel(/Telefone \/ WhatsApp/).fill('62988887777');
   // Endereço digitado à mão (a busca por CEP depende de um serviço externo)
   await page.getByRole('button', { name: 'Digitar em campo único' }).click();
-  await page.getByLabel(/Endereço Completo Manual/).fill('Rua das Flores, 10, Setor Ponta Kayana, Trindade - GO');
+  await page.getByLabel(/Endereço Completo Manual/).fill('Rua das Flores, 10, Setor Solange, Trindade - GO');
+  // Ficha do atleta: sexo, categoria, responsável (é menor de idade) e os termos
+  await page.getByRole('radio', { name: 'Masculino', exact: true }).check({ force: true });
+  await page.getByRole('radio', { name: 'Sub-11', exact: true }).check({ force: true });
+  await page.getByLabel(/Nome completo do responsável/).fill('Responsável Teste');
+  await page.getByLabel(/CPF do responsável/).fill('529.982.247-25');
+  await page.getByLabel(/Contato do responsável/).fill('62988881111');
+  await page.getByRole('checkbox', { name: /Li e concordo/ }).check();
   await page.getByRole('checkbox', { name: /Autorizo e concordo/ }).check();
-  await page.getByRole('button', { name: 'Confirmar Inscrição Gratuita' }).click();
+  await page.getByRole('button', { name: 'Enviar inscrição' }).click();
 }
 
 test('uma família inscreve uma criança pelo formulário', async ({ page }) => {
@@ -65,8 +73,7 @@ test('uma pessoa se oferece como voluntária', async ({ page }) => {
 
 test('quem quer doar vê o QR Code do PIX', async ({ page }) => {
   await page.goto('/#como-ajudar');
-  await page.getByRole('button', { name: 'Mostrar QR Code' }).click();
-  const qr = page.getByRole('img', { name: 'QR Code PIX da Associação Novo Amanhecer' });
+  const qr = page.getByRole('img', { name: 'QR Code PIX do Instituto Trindade Solidária' });
   await expect(qr).toBeVisible();
   // a imagem foi gerada de verdade (não está quebrada)
   expect(await qr.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
@@ -76,6 +83,6 @@ test('no celular, o menu abre e leva até a seção escolhida', async ({ page, i
   test.skip(!isMobile, 'menu sanduíche só existe no celular');
   await page.goto('/');
   await page.getByRole('button', { name: 'Abrir menu' }).click();
-  await page.getByRole('link', { name: 'Projetos' }).locator('visible=true').first().click();
+  await page.getByRole('link', { name: 'Atuação' }).locator('visible=true').first().click();
   await expect(page.locator('#projetos')).toBeInViewport();
 });

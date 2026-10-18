@@ -1,5 +1,5 @@
 {
-  "name": "novo-amanhecer",
+  "name": "instituto-trindade-solidaria",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "build": "vite build",
     "deploy": "vite build && wrangler deploy",
     "preview": "vite build && wrangler dev",
-    "db:migrate": "wrangler d1 migrations apply novo-amanhecer-db --remote",
+    "db:migrate": "wrangler d1 migrations apply trindade-solidaria-db --remote",
     "lint": "tsc --noEmit && tsc --noEmit -p worker && tsc --noEmit -p test",
     "clean": "rm -rf dist .wrangler",
     "test": "vitest run",

@@ -1,186 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
 import { SiteContent } from '../../types';
-import { Foto } from './Foto';
+import { Simbolo } from '../brand/Logo';
+import { BAIRROS_ATENDIDOS, INSTITUTO } from '../../data/instituto';
 
 interface HeroProps {
   content: SiteContent;
   onOpenCadastro: () => void;
 }
 
-interface Slide {
-  img: string;
-  alt: string;
-  pos: string;
-  kicker: string;
-  title: string;
-  text: string;
-  cta: string;
-  credit?: string;
-  action: 'cadastro' | 'ajudar';
-}
-
-const INTERVALO_MS = 7000;
-
+// Topo no estilo do banner "Centro de Iniciação Esportiva": azul petróleo com textura de pontos,
+// título grande em caixa alta e, à direita, um painel cortado na diagonal com as faixas da marca.
 export const Hero: React.FC<HeroProps> = ({ content, onOpenCadastro }) => {
-  const slides: Slide[] = [
-    {
-      img: '/fotos/hero-futebol-comemoracao.jpg',
-      alt: 'Escolinha de Futebol River Trindade comemorando o título no campo',
-      pos: 'center 40%',
-      kicker: 'Escolinha de Futebol River',
-      title: content.hero_title,
-      text: content.hero_subtitle,
-      cta: 'Inscrever uma criança',
-      credit: 'Foto: Kennedy Martins',
-      action: 'cadastro',
-    },
-    {
-      img: '/fotos/projeto-book.jpg',
-      alt: 'Gestante com girassóis no ensaio do Book Solidário',
-      pos: 'center 30%',
-      kicker: 'Book Solidário',
-      title: 'Um dia de cuidado para quem espera um bebê.',
-      text: 'Ensaio fotográfico, maquiagem e kit de enxoval para gestantes da comunidade, sem nenhum custo.',
-      cta: 'Quero participar',
-      action: 'cadastro',
-    },
-    {
-      img: '/fotos/galeria-acoes-homem-aranha.jpg',
-      alt: 'Homem-Aranha com crianças na ação social da associação',
-      pos: 'center 25%',
-      kicker: 'Ações Sociais',
-      title: 'Festa, lanche e alegria para as crianças do bairro.',
-      text: 'Personagens, pintura facial, lanche e bolo em datas especiais, feitos com a ajuda de voluntários e parceiros.',
-      cta: 'Apoiar a próxima ação',
-      action: 'ajudar',
-    },
+  const anos = new Date().getFullYear() - INSTITUTO.anoFundacao;
+  const fatos = [
+    { valor: `Desde ${INSTITUTO.anoFundacao}`, rotulo: anos > 0 ? `${anos} ${anos === 1 ? 'ano' : 'anos'} de atuação` : 'em atuação' },
+    { valor: `${content.impacto_projetos || 4} áreas`, rotulo: 'de atuação social' },
+    { valor: `${BAIRROS_ATENDIDOS.length - 1}+ bairros`, rotulo: 'atendidos em Trindade' },
   ];
 
-  const [idx, setIdx] = useState(0);
-  const [pausado, setPausado] = useState(false);
-  // Quantos slides já podem baixar a foto: começa só com o 1º; quando uma foto aparece,
-  // libera a do slide seguinte. Assim a página abre baixando uma foto só (mais rápido no celular).
-  const [liberados, setLiberados] = useState(1);
-  const liberarProximo = (i: number) => setLiberados((n) => Math.max(n, i + 2));
-  const total = slides.length;
-  const go = (step: number) => setIdx((i) => (i + step + total) % total);
-
-  useEffect(() => {
-    const reduz = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (pausado || reduz) return;
-    const t = window.setTimeout(() => setIdx((i) => (i + 1) % total), INTERVALO_MS);
-    return () => window.clearTimeout(t);
-  }, [idx, pausado, total]);
-
-  useEffect(() => {
-    if (idx > 0) liberarProximo(idx);
-  }, [idx]);
-
-  const slide = slides[idx];
-
-  const Cta = () =>
-    slide.action === 'cadastro' ? (
-      <button onClick={onOpenCadastro} className="btn-sun min-h-[50px] w-full px-6 text-base sm:w-auto lg:min-h-[52px]">
-        {slide.cta}
-      </button>
-    ) : (
-      <a href="#como-ajudar" className="btn-sun min-h-[50px] w-full px-6 text-base sm:w-auto lg:min-h-[52px]">
-        {slide.cta}
-      </a>
-    );
-
   return (
-    <section
-      id="inicio"
-      aria-roledescription="carrossel"
-      aria-label="Destaques da associação"
-      onMouseEnter={() => setPausado(true)}
-      onMouseLeave={() => setPausado(false)}
-      onFocus={() => setPausado(true)}
-      onBlur={() => setPausado(false)}
-      className="relative overflow-hidden bg-brand-dark"
-    >
-      {slides.map((s, i) => (i < liberados || i === idx) && (
-        <Foto
-          key={s.img}
-          src={s.img}
-          sizes="100vw"
-          alt={i === idx ? s.alt : ''}
-          aria-hidden={i !== idx}
-          style={{ objectPosition: s.pos }}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${i === idx ? 'opacity-100' : 'opacity-0'}`}
-          fetchPriority={i === 0 ? 'high' : undefined}
-          loading={i === 0 ? 'eager' : 'lazy'}
-          onLoad={() => i === idx && liberarProximo(i)}
-          onError={() => i === idx && liberarProximo(i)}
-        />
-      ))}
-      <div className="bg-hero-scrim absolute inset-0" />
+    <section id="inicio" aria-label="Apresentação do instituto" className="bg-pontos corte-base relative overflow-hidden text-white">
+      {/* Painel diagonal (computador) */}
+      <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[44%] lg:block">
+        <div className="absolute inset-0 bg-white [clip-path:polygon(22%_0,100%_0,100%_100%,0_100%)]" />
+        <div className="absolute inset-y-0 left-[3%] w-10 -skew-x-[12deg] bg-lima" />
+        <div className="absolute inset-y-0 left-[9%] w-10 -skew-x-[12deg] bg-ceu" />
+        <div className="absolute inset-0 flex items-center justify-center pl-[18%]">
+          <Simbolo decorativo className="h-[300px] xl:h-[340px]" />
+        </div>
+      </div>
 
-      <div className="container-site relative flex min-h-[600px] flex-col justify-end pb-8 pt-[270px] lg:min-h-[620px] lg:justify-center lg:py-24">
-        <div className="flex max-w-[600px] flex-col gap-3.5 text-white lg:gap-5" aria-live="polite">
-          <span className="self-start rounded bg-sun px-2.5 py-1 text-xs font-extrabold text-ink lg:px-3 lg:py-1.5 lg:text-[13px]">
-            {slide.kicker}
+      <div className="container-site relative flex min-h-[560px] flex-col justify-center gap-10 pb-[calc(4vw+56px)] pt-14 lg:min-h-[640px] lg:pt-20">
+        <div className="flex max-w-[640px] flex-col gap-5 lg:max-w-[52%]">
+          <span className="self-start -skew-x-[12deg] bg-lima px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.12em] text-brand-dark sm:text-[13px]">
+            <span className="inline-block skew-x-[12deg]">{content.hero_tagline}</span>
           </span>
-          <h1 className="text-[30px] font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-4xl lg:text-[46px] lg:leading-[1.08] lg:tracking-[-0.035em]">
-            {slide.title}
+          <h1 className="text-[40px] font-black uppercase leading-[0.98] tracking-[-0.02em] sm:text-6xl lg:text-[68px]">
+            {content.hero_title}
           </h1>
-          <p className="hidden text-lg leading-relaxed text-brand-light sm:block">{slide.text}</p>
-          <div className="flex flex-col gap-3 pt-1 sm:flex-row lg:gap-3.5 lg:pt-1.5">
-            <Cta />
-            <a href="#como-ajudar" className="btn-outline-light hidden min-h-[52px] px-6 text-base sm:inline-flex">
-              Como ajudar
+          <p className="max-w-xl text-base leading-relaxed text-brand-light sm:text-lg">{content.hero_subtitle}</p>
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+            <button onClick={onOpenCadastro} className="btn-lima min-h-[52px] px-7 text-base">
+              Fazer inscrição
+            </button>
+            <a href="#como-ajudar" className="btn-outline-light min-h-[52px] px-7 text-base uppercase tracking-wide">
+              Quero ajudar
             </a>
           </div>
         </div>
 
-        {/* Pontos (celular) */}
-        <div className="flex items-center justify-center gap-2.5 pt-5 lg:hidden">
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIdx(i)}
-              aria-label={`Ir para o banner ${i + 1}`}
-              aria-current={i === idx}
-              className={`alvo-toque h-2.5 rounded-full transition-all ${i === idx ? 'w-7 bg-sun' : 'w-2.5 bg-white'}`}
-            />
+        <dl className="grid max-w-[640px] grid-cols-3 gap-3 border-t border-white/15 pt-6 lg:max-w-[52%]">
+          {fatos.map((f) => (
+            <div key={f.rotulo} className="flex flex-col-reverse gap-1">
+              <dt className="text-xs leading-snug text-brand-light sm:text-sm">{f.rotulo}</dt>
+              <dd className="text-lg font-black uppercase leading-none text-lima sm:text-2xl">{f.valor}</dd>
+            </div>
           ))}
-        </div>
-      </div>
-
-      {/* Crédito da foto, setas e pontos (computador) */}
-      <div className="container-site absolute inset-x-0 bottom-7 hidden items-end justify-between lg:flex">
-        <span className="text-xs text-white/85">{slide.credit}</span>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Banner anterior"
-            className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-white text-brand-dark hover:bg-sun-soft"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIdx(i)}
-              aria-label={`Ir para o banner ${i + 1}`}
-              aria-current={i === idx}
-              className={`alvo-toque h-2.5 rounded-full transition-all ${i === idx ? 'w-7 bg-sun' : 'w-2.5 bg-white'}`}
-            />
-          ))}
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Próximo banner"
-            className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-white text-brand-dark hover:bg-sun-soft"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
+        </dl>
       </div>
     </section>
   );

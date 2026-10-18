@@ -36,7 +36,7 @@ export const ModalCadastro: React.FC<ModalCadastroProps> = ({ formData, setFormD
               Cadastrar Novo Beneficiário
             </h2>
             <p className="text-xs text-muted">
-              Adicione um participante manualmente à base de dados da associação.
+              Adicione um participante manualmente à base de dados do instituto.
             </p>
           </div>
         </div>

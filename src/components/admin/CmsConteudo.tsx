@@ -20,7 +20,7 @@ export const CmsConteudo: React.FC<CmsConteudoProps> = ({ content, onUpdateConte
   };
 
   const handleResetToDefault = () => {
-    if (window.confirm('Deseja restaurar os textos originais da Associação Novo Amanhecer?')) {
+    if (window.confirm('Deseja restaurar os textos originais do Instituto Trindade Solidária?')) {
       setFormData(INITIAL_SITE_CONTENT);
       onUpdateContent(INITIAL_SITE_CONTENT);
     }
@@ -95,7 +95,7 @@ export const CmsConteudo: React.FC<CmsConteudoProps> = ({ content, onUpdateConte
           </div>
         </div>
 
-        {/* Bloco 2: Sobre a Associação */}
+        {/* Bloco 2: Sobre o Instituto */}
         <div className="bg-white p-6 rounded-[14px] border border-line shadow-2xs space-y-4">
           <h3 className="text-sm font-bold text-amber-900 uppercase tracking-wider">
             2. História, Missão, Visão e Valores
@@ -103,7 +103,7 @@ export const CmsConteudo: React.FC<CmsConteudoProps> = ({ content, onUpdateConte
 
           <div>
             <label htmlFor="cms-historia-curta-associacao" className="block text-xs font-bold text-body uppercase mb-1">
-              História Curta da Associação em Trindade
+              História do Instituto em Trindade
             </label>
             <textarea
               id="cms-historia-curta-associacao"
@@ -273,7 +273,7 @@ export const CmsConteudo: React.FC<CmsConteudoProps> = ({ content, onUpdateConte
               type="text"
               value={formData.contato_whatsapp_mensagem || ''}
               onChange={(e) => setFormData({ ...formData, contato_whatsapp_mensagem: e.target.value })}
-              placeholder="Ex: Olá! Vim pelo site da Associação Novo Amanhecer e gostaria de mais informações..."
+              placeholder="Ex: Olá! Vim pelo site do Instituto Trindade Solidária e gostaria de mais informações..."
               className="w-full px-3 py-2 text-xs bg-paper border border-line rounded-xl"
             />
             <p className="text-[11px] text-muted mt-1">
@@ -318,7 +318,7 @@ export const CmsConteudo: React.FC<CmsConteudoProps> = ({ content, onUpdateConte
               type="url"
               value={formData.instagram_url}
               onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
-              placeholder="https://www.instagram.com/anovoamanhecer"
+              placeholder="https://www.instagram.com/institutotrindadesolidaria"
               className="w-full px-3 py-2 text-xs bg-paper border border-line rounded-xl font-mono text-pink-700"
             />
             <p className="text-[11px] text-muted mt-1">

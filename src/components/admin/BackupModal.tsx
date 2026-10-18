@@ -65,7 +65,7 @@ export const BackupModal: React.FC<BackupModalProps> = ({
     const backupData = {
       versao: '2.0.0',
       data_backup: new Date().toISOString(),
-      associacao: 'Associação Novo Amanhecer - Trindade/GO',
+      associacao: 'Instituto Trindade Solidária - Trindade/GO',
       beneficiarios: beneficiaries,
       projetos: projects,
       galeria: gallery,
@@ -77,7 +77,7 @@ export const BackupModal: React.FC<BackupModalProps> = ({
     downloadAnchor.setAttribute('href', dataStr);
     downloadAnchor.setAttribute(
       'download',
-      `backup_novo_amanhecer_trindade_${new Date().toISOString().split('T')[0]}.json`
+      `backup_trindade_solidaria_trindade_${new Date().toISOString().split('T')[0]}.json`
     );
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
@@ -190,7 +190,7 @@ export const BackupModal: React.FC<BackupModalProps> = ({
                 </span>
               </div>
               <p className="text-xs text-body leading-relaxed mb-4">
-                Consolidado por modalidade (Ballet, Futebol, Book Gestante, Festas) com total de inscritos, vagas confirmadas, fila de espera e coordenador.
+                Consolidado por área de atuação (Esporte, Cestas, Moradia, Cidadania) com total de inscritos, vagas confirmadas, fila de espera e coordenador.
               </p>
             </div>
 

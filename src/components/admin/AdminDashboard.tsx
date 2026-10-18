@@ -27,7 +27,7 @@ import {
   History,
 } from 'lucide-react';
 import { Beneficiary, ProjectCard, GalleryPhoto, SiteContent, AdminUser, Volunteer, AuthUser } from '../../types';
-import { NovoAmanhecerLogo } from '../brand/NovoAmanhecerLogo';
+import { Logo, Simbolo } from '../brand/Logo';
 import { BeneficiariosCrud } from './BeneficiariosCrud';
 import { ProjetosCrud } from './ProjetosCrud';
 import { CmsConteudo } from './CmsConteudo';
@@ -169,13 +169,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const activeLabel = tabs.find((t) => t.id === activeTab)?.label ?? '';
   const roleLabel = isAdmin ? 'Admin geral' : isCoordinator ? 'Coordenação' : 'Voluntário';
   const roleTitle = isAdmin ? 'Acesso total de administrador' : isCoordinator ? 'Acesso de coordenação' : 'Acesso de voluntário (dados pessoais restritos pela LGPD)';
-  const roleChip = isAdmin ? 'bg-sun text-ink' : isCoordinator ? 'bg-brand-soft text-brand-ink' : 'bg-white/15 text-white';
+  const roleChip = isAdmin ? 'bg-lima text-ink' : isCoordinator ? 'bg-brand-soft text-brand-ink' : 'bg-white/15 text-white';
 
   return (
     <div className="painel-admin min-h-screen bg-paper font-sans lg:flex">
       <aside className="bg-footer sticky top-0 hidden h-screen w-64 shrink-0 flex-col text-brand-light lg:flex">
         <div className="border-b border-brand-line px-5 py-5">
-          <NovoAmanhecerLogo size="sm" inverted />
+          <Logo fundo="escuro" className="h-11" />
         </div>
         <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4" aria-label="Seções do painel">
           {visibleTabs.map((t) => {
@@ -186,12 +186,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 key={t.id}
                 onClick={() => setActiveTab(t.id)}
                 aria-current={active ? 'page' : undefined}
-                className={`flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm font-semibold transition-colors ${active ? 'bg-white/12 text-white shadow-[inset_3px_0_0_var(--color-sun)]' : 'text-brand-light hover:bg-white/8 hover:text-white'}`}
+                className={`flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm font-semibold transition-colors ${active ? 'bg-white/12 text-white shadow-[inset_3px_0_0_var(--color-lima)]' : 'text-brand-light hover:bg-white/8 hover:text-white'}`}
               >
-                <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-sun' : ''}`} />
+                <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-lima' : ''}`} />
                 <span className="flex-1 truncate">{t.label}</span>
                 {!!t.badge && t.badge > 0 && (
-                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-sun px-1.5 text-[11px] font-extrabold text-ink">
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-lima px-1.5 text-[11px] font-extrabold text-ink">
                     {t.badge}
                   </span>
                 )}
@@ -220,7 +220,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         <header className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur">
           <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="lg:hidden"><NovoAmanhecerLogo size="sm" showText={false} /></span>
+              <span className="lg:hidden"><Simbolo className="h-8" /></span>
               <div className="min-w-0">
                 <span className="block text-[11px] font-extrabold uppercase tracking-[0.04em] text-brand lg:text-xs">Painel de gestão</span>
                 <h1 className="truncate text-base font-extrabold text-brand-dark lg:text-lg">{activeLabel}</h1>
@@ -270,7 +270,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               return (
                 <button key={t.id} onClick={() => setActiveTab(t.id)} aria-current={active ? 'page' : undefined} className={`inline-flex min-h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-md px-3 text-[13px] font-bold transition-colors ${active ? 'bg-brand text-white' : 'bg-sand text-body hover:bg-line'}`}>
                   <Icon className="h-4 w-4" />{t.label}
-                  {!!t.badge && t.badge > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-sun px-1.5 text-[11px] font-extrabold text-ink">{t.badge}</span>}
+                  {!!t.badge && t.badge > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-lima px-1.5 text-[11px] font-extrabold text-ink">{t.badge}</span>}
                 </button>
               );
             })}
@@ -305,10 +305,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   Painel de Controle Oficial
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black mt-1">
-                  Associação Novo Amanhecer
+                  Instituto Trindade Solidária
                 </h2>
                 <p className="text-xs sm:text-sm text-amber-100 mt-1 max-w-xl">
-                  Bem-vindo(a) à coordenação de Trindade - GO. Aqui você aprova novos cadastros de ballet, futebol, gestantes e gerencia todo o conteúdo do site.
+                  Bem-vindo(a) à coordenação de Trindade - GO. Aqui você aprova novas inscrições do esporte, cestas, moradia e cidadania e gerencia todo o conteúdo do site.
                 </p>
               </div>
 
@@ -423,7 +423,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <div className="divide-y divide-slate-100 text-xs">
                   <div className="py-2.5 flex justify-between">
                     <span className="text-slate-500">Razão Social:</span>
-                    <span className="font-bold text-slate-800">Associação Novo Amanhecer</span>
+                    <span className="font-bold text-slate-800">Instituto Trindade Solidária</span>
                   </div>
                   <div className="py-2.5 flex justify-between">
                     <span className="text-slate-500">CNPJ:</span>
@@ -445,7 +445,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       rel="noreferrer"
                       className="font-bold text-amber-700 hover:underline"
                     >
-                      @anovoamanhecer
+                      @institutotrindadesolidaria
                     </a>
                   </div>
                 </div>
@@ -482,7 +482,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     Exportação de Relatórios Oficiais em Planilhas CSV
                   </h3>
                   <p className="text-xs text-slate-600 mt-0.5">
-                    Gere cópias para chamadas presenciais nas oficinas de ballet e futebol, arquivos físicos de prestação de contas ou auditorias.
+                    Gere cópias para chamadas presenciais nos treinos e nas entregas, arquivos físicos de prestação de contas ou auditorias.
                   </p>
                 </div>
 
@@ -541,7 +541,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       Relatório Consolidado por Projeto
                     </h4>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Estatísticas por projeto (Ballet, Futebol, Gestantes, Festas): total de vagas, confirmados, fila de espera e coordenadores.
+                      Estatísticas por área (Esporte, Cestas, Moradia, Cidadania): total de vagas, confirmados, fila de espera e coordenadores.
                     </p>
                   </div>
 
@@ -675,7 +675,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {/* Rodapé do Painel Administrativo com Assinatura */}
         <footer className="pt-8 pb-4 border-t border-slate-200 mt-12 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
           <div>
-            Painel de Gestão Administrativa · Associação Novo Amanhecer
+            Painel de Gestão Administrativa · Instituto Trindade Solidária
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[11px] text-slate-600 font-medium">Desenvolvido por</span>

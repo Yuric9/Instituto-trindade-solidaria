@@ -61,7 +61,7 @@ export const DoacaoModal: React.FC<DoacaoModalProps> = ({
     try {
       const payload = generatePixPayload({
         key: content.contato_pix_chave,
-        name: 'ASSOC NOVO AMANHECER',
+        name: 'INST TRINDADE SOLIDARIA',
         city: 'TRINDADE',
         amount: currentAmount > 0 ? currentAmount : undefined,
       });
@@ -174,7 +174,7 @@ export const DoacaoModal: React.FC<DoacaoModalProps> = ({
               <strong className="text-brand font-bold">
                 {currentAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
               </strong>{' '}
-              foi gravada no sistema oficial da Associação Novo Amanhecer.
+              foi gravada no sistema oficial do Instituto Trindade Solidária.
             </p>
 
             <div className="p-4 bg-sand rounded-lg border border-line text-left text-xs text-slate-700 space-y-2">
@@ -214,7 +214,7 @@ export const DoacaoModal: React.FC<DoacaoModalProps> = ({
                   Faça sua Doação Solidária
                 </h3>
                 <p className="text-xs text-slate-600">
-                  Associação Novo Amanhecer · Trindade - GO · CNPJ {content.contato_cnpj}
+                  Instituto Trindade Solidária · Trindade - GO · CNPJ {content.contato_cnpj}
                 </p>
               </div>
             </div>
@@ -352,7 +352,7 @@ export const DoacaoModal: React.FC<DoacaoModalProps> = ({
                   Para doações recorrentes ou via cartão de crédito (Visa, Mastercard, Elo), o backend está 100% estruturado. Enquanto você registra sua intenção abaixo, o recebimento via PIX é instantâneo e livre de taxas de operadoras.
                 </p>
                 <div className="p-2.5 bg-sand border border-line rounded-md text-[11px] text-brand">
-                  💡 <strong>Dica da Associação:</strong> O PIX cai imediatamente na conta bancária da entidade sem retenção de tarifas, garantindo que 100% da sua doação vá para as crianças de Trindade/GO.
+                  💡 <strong>Dica do Instituto:</strong> O PIX cai imediatamente na conta bancária da entidade sem retenção de tarifas, garantindo que 100% da sua doação vá para as crianças de Trindade/GO.
                 </div>
               </div>
             )}
@@ -415,7 +415,7 @@ export const DoacaoModal: React.FC<DoacaoModalProps> = ({
                 <input
                   id="doacao-mensagem-ou-dedicacao"
                   type="text"
-                  placeholder="Ex: Para apoiar as sapatilhas do ballet infantil..."
+                  placeholder="Ex: Para ajudar nas cestas básicas do mês..."
                   value={mensagem}
                   onChange={(e) => setMensagem(e.target.value)}
                   className="w-full px-3 py-2 text-xs border border-slate-200 rounded-md focus:ring-2 focus:ring-brand focus:outline-hidden"

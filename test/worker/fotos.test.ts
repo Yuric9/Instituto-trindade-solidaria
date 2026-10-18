@@ -10,10 +10,10 @@ const WEBP = new Uint8Array([...new TextEncoder().encode('RIFF'), 1, 0, 0, 0, ..
 function enviar(corpo: BodyInit, tipo: string, cookie?: string) {
   const headers = new Headers({ 'content-type': tipo, 'cf-connecting-ip': newIp() });
   if (cookie) headers.set('cookie', cookie);
-  return exports.default.fetch(new Request('https://novoamanhecer.test/api/uploads', { method: 'POST', headers, body: corpo }));
+  return exports.default.fetch(new Request('https://trindadesolidaria.test/api/uploads', { method: 'POST', headers, body: corpo }));
 }
 
-const baixar = (url: string) => exports.default.fetch(new Request(`https://novoamanhecer.test${url}`));
+const baixar = (url: string) => exports.default.fetch(new Request(`https://trindadesolidaria.test${url}`));
 
 describe('envio de fotos (POST /api/uploads)', () => {
   it.each([

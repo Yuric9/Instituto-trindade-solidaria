@@ -1,4 +1,4 @@
--- Estrutura do banco D1 da Associação Novo Amanhecer.
+-- Estrutura do banco D1 do Instituto Trindade Solidária.
 -- O Worker também cria estas tabelas sozinho na primeira requisição (CREATE TABLE IF NOT EXISTS).
 
 CREATE TABLE IF NOT EXISTS roles (
@@ -48,6 +48,9 @@ CREATE TABLE IF NOT EXISTS beneficiaries (
   status TEXT NOT NULL DEFAULT 'Pendente',
   observacoes TEXT,
   motivo_status TEXT,
+  -- Ficha do Centro de Iniciação Esportiva (RG, sexo, categoria, responsável e aceite dos termos), em JSON.
+  -- Ver src/utils/ficha.ts. Fica vazia nas inscrições das outras áreas.
+  ficha_json TEXT,
   consentimento_lgpd INTEGER NOT NULL DEFAULT 1,
   ip_origem TEXT,
   criado_em TEXT NOT NULL,

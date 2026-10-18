@@ -43,13 +43,17 @@ export interface PixPayloadParams {
  */
 export function generatePixPayload({
   key,
-  name = 'ASSOC NOVO AMANHECER',
+  name = 'INST TRINDADE SOLIDARIA',
   city = 'TRINDADE',
   amount,
   txid = '***',
 }: PixPayloadParams): string {
-  // Limpar formatação da chave se for CNPJ ou Telefone
-  const cleanKey = key.trim();
+  // CNPJ ou CPF digitado com pontuação ("45.698.518/0001-89") vira só os dígitos, como os bancos
+  // esperam. Telefone (com parênteses ou +55), e-mail e chave aleatória ficam como estão.
+  const trimmedKey = key.trim();
+  const keyDigits = trimmedKey.replace(/[.\-/\s]/g, '');
+  const isCpfOuCnpj = /^\d+$/.test(keyDigits) && (keyDigits.length === 11 || keyDigits.length === 14);
+  const cleanKey = isCpfOuCnpj ? keyDigits : trimmedKey;
   const cleanName = name
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -86,7 +90,7 @@ export function generatePixPayload({
   payload += formatTlv('58', 'BR');
 
   // 59: Merchant Name
-  payload += formatTlv('59', cleanName || 'ASSOC NOVO AMANHECER');
+  payload += formatTlv('59', cleanName || 'INST TRINDADE SOLIDARIA');
 
   // 60: Merchant City
   payload += formatTlv('60', cleanCity || 'TRINDADE');

@@ -40,6 +40,14 @@ export function exportBeneficiariesToCsv(
     'Data de Inscrição': b.criado_em,
     'Última Atualização': b.atualizado_em || b.criado_em,
     'Observações / Notas': b.observacoes || 'Nenhuma',
+    // Ficha da iniciação esportiva (vazio nas outras áreas)
+    Categoria: b.ficha?.categoria || '',
+    Sexo: b.ficha?.sexo || '',
+    RG: b.ficha?.rg || '',
+    'Responsável': b.ficha?.responsavel?.nome || '',
+    'CPF do Responsável': b.ficha?.responsavel?.cpf || '',
+    'Contato do Responsável': b.ficha?.responsavel?.telefone || '',
+    'Termos Aceitos': b.ficha ? (b.ficha.termos_aceitos ? 'Sim' : 'Não') : '',
   }));
 
   const csv = Papa.unparse(dataToExport, {
@@ -50,7 +58,7 @@ export function exportBeneficiariesToCsv(
   const dateStr = new Date().toISOString().split('T')[0];
   const fileName =
     customFilename ||
-    `relatorio_beneficiarios_novo_amanhecer_${dateStr}.csv`;
+    `relatorio_beneficiarios_trindade_solidaria_${dateStr}.csv`;
 
   downloadCsvBlob(csv, fileName);
 }
@@ -114,7 +122,7 @@ export function exportProjectsReportToCsv(
   const dateStr = new Date().toISOString().split('T')[0];
   const fileName =
     customFilename ||
-    `relatorio_projetos_sociais_novo_amanhecer_${dateStr}.csv`;
+    `relatorio_projetos_sociais_trindade_solidaria_${dateStr}.csv`;
 
   downloadCsvBlob(csv, fileName);
 }
@@ -133,8 +141,8 @@ export function exportExecutiveSummaryToCsv(
   const summaryData = [
     {
       Categoria: 'Dados Institucionais',
-      Métrica: 'Razão Social / Associação',
-      Valor: 'Associação Novo Amanhecer',
+      Métrica: 'Razão Social',
+      Valor: 'Instituto Trindade Solidária',
     },
     {
       Categoria: 'Dados Institucionais',

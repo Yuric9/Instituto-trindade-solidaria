@@ -203,10 +203,10 @@ export const BarraFiltros: React.FC<BarraFiltrosProps> = ({
             className="px-2.5 py-1.5 bg-paper border border-line rounded-lg text-ink focus:outline-none"
           >
             <option value="todos">Todos os Projetos ({totalGeral})</option>
-            <option value="futebol">Apenas Futebol ({projectCounts.futebol})</option>
-            <option value="ballet">Apenas Ballet ({projectCounts.ballet})</option>
-            <option value="book">Apenas Book Gestante ({projectCounts.book})</option>
-            <option value="festas">Apenas Festas & Ações ({projectCounts.festas})</option>
+            <option value="esporte">Apenas Esporte ({projectCounts.esporte})</option>
+            <option value="cestas">Apenas Cestas ({projectCounts.cestas})</option>
+            <option value="moradia">Apenas Moradia ({projectCounts.moradia})</option>
+            <option value="cidadania">Apenas Cidadania ({projectCounts.cidadania})</option>
             {projects
               ?.filter((p) => !ATALHOS_PROJETO.some((atalho) => isProjectMatch(p.titulo, atalho)))
               .map((p) => (
